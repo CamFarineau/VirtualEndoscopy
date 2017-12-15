@@ -1,0 +1,12 @@
+Endoscopy Dataset: 
+- https://mri.radiology.uiowa.edu/visible_human_datasets.html
+- http://medvis.org/datasets/
+
+Software:
+- https://www.slicer.org/wiki/Documentation/4.8/Modules/Endoscopy
+
+3D Reconstruction:
+- https://www.vtk.org/Wiki/VTK/Examples/Cxx/Modelling/MarchingCubes
+
+Other:
+- http://groups.csail.mit.edu/vision/medical-vision/virtual-endoscopy
