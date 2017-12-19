@@ -1,64 +1,109 @@
-#include <vtkCylinderSource.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
-#include <vtkRenderer.h>
+#include "vtkDICOMImageReader.h"
+#include "vtkImageData.h"
 #include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkProperty.h>
-#include <vtkCamera.h>
+
+
 #include <vtkSmartPointer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
+#include <vtkJPEGReader.h>
+#include <vtkImageMapper3D.h>
+#include <vtkImageViewer2.h>
 
-int main(int, char *[])
+
+//#include "mainwindow.h"
+#include <QApplication>
+#include <QLCDNumber>
+
+#include <QPushButton>
+#include <QGridLayout>
+#include <QSlider>
+
+int main(int argc, char *argv[])
 {
-  // This creates a polygonal cylinder model with eight circumferential facets
-  // (i.e, in practice an octagonal prism).
-  vtkSmartPointer<vtkCylinderSource> cylinder =
-    vtkSmartPointer<vtkCylinderSource>::New();
-  cylinder->SetResolution(8);
+    QApplication app(argc, argv);
 
-  // The mapper is responsible for pushing the geometry into the graphics library.
-  // It may also do color mapping, if scalars or other attributes are defined.
-  vtkSmartPointer<vtkPolyDataMapper> cylinderMapper =
-    vtkSmartPointer<vtkPolyDataMapper>::New();
-  cylinderMapper->SetInputConnection(cylinder->GetOutputPort());
+    QWidget fenetre;
 
-  // The actor is a grouping mechanism: besides the geometry (mapper), it
-  // also has a property, transformation matrix, and/or texture map.
-  // Here we set its color and rotate it around the X and Y axes.
-  vtkSmartPointer<vtkActor> cylinderActor =
-    vtkSmartPointer<vtkActor>::New();
-  cylinderActor->SetMapper(cylinderMapper);
-  cylinderActor->GetProperty()->SetColor(1.0000, 0.3882, 0.2784);
-  cylinderActor->RotateX(30.0);
-  cylinderActor->RotateY(-45.0);
+    QLCDNumber *number1 = new QLCDNumber();
+    QLCDNumber *number2 = new QLCDNumber();
+    QLCDNumber *number3 = new QLCDNumber();
 
-  // The renderer generates the image
-  // which is then displayed on the render window.
-  // It can be thought of as a scene to which the actor is added
-  vtkSmartPointer<vtkRenderer> renderer =
-    vtkSmartPointer<vtkRenderer>::New();
-  renderer->AddActor(cylinderActor);
-  renderer->SetBackground(0.1, 0.2, 0.4);
-  // Zoom in a little by accessing the camera and invoking its "Zoom" method.
-  renderer->ResetCamera();
-  renderer->GetActiveCamera()->Zoom(1.5);
+    QSlider *slider1 = new QSlider(Qt::Horizontal);
+    QSlider *slider2 = new QSlider(Qt::Horizontal);
+    QSlider *slider3 = new QSlider(Qt::Horizontal);
 
-  // The render window is the actual GUI window
-  // that appears on the computer screen
-  vtkSmartPointer<vtkRenderWindow> renderWindow =
-    vtkSmartPointer<vtkRenderWindow>::New();
-  renderWindow->SetSize(200, 200);
-  renderWindow->AddRenderer(renderer);
+    QPushButton *bouton1 = new QPushButton("Fenetre 1");
+    QPushButton *bouton2 = new QPushButton("Fenetre 2");
+    QPushButton *bouton3 = new QPushButton("Fenetre 3");
 
-  // The render window interactor captures mouse events
-  // and will perform appropriate camera or actor manipulation
-  // depending on the nature of the events.
-  vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
+
+    QVBoxLayout *layout1 = new QVBoxLayout;
+    layout1->addWidget(number1);
+    layout1->addWidget(slider1);
+    layout1->addWidget(bouton1);
+
+    QVBoxLayout *layout2 = new QVBoxLayout;
+    layout2->addWidget(number2);
+    layout2->addWidget(slider2);
+    layout2->addWidget(bouton2);
+
+    QVBoxLayout *layout3 = new QVBoxLayout;
+    layout3->addWidget(number3);
+    layout3->addWidget(slider3);
+    layout3->addWidget(bouton3);
+
+    QGridLayout *layout_global = new QGridLayout;
+
+    layout_global->addLayout(layout1,0,0);
+    layout_global->addLayout(layout2,0,1);
+    layout_global->addLayout(layout3,1,0);
+
+    slider1->setRange(0,150);
+    slider2->setRange(0,150);
+    slider3->setRange(0,150);
+
+    QObject::connect(slider1, SIGNAL(valueChanged(int)), number1, SLOT(display(int))) ;
+    QObject::connect(slider2, SIGNAL(valueChanged(int)), number2, SLOT(display(int))) ;
+    QObject::connect(slider3, SIGNAL(valueChanged(int)), number2, SLOT(display(int))) ;
+
+    // Read the data
+    vtkImageData *input=0;
+
+    std::string dirname;
+    dirname="/home/nico/Projet_Majeure/Head";
+    vtkDICOMImageReader *dicomReader = vtkDICOMImageReader::New();
+    dicomReader->SetDirectoryName(dirname.c_str());
+    dicomReader->Update();
+    input=dicomReader->GetOutput();
+
+    int dim[3];
+    input->GetDimensions(dim);
+    std::cout<<"Dimensions :"<<dim[0]<<" , "<<dim[1]<<" , "<<dim[2]<<";"<<std::endl;
+
+    dicomReader;
+
+    // Display the result
+    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
     vtkSmartPointer<vtkRenderWindowInteractor>::New();
-  renderWindowInteractor->SetRenderWindow(renderWindow);
 
-  // This starts the event loop and as a side effect causes an initial render.
-  renderWindowInteractor->Start();
+    vtkSmartPointer<vtkImageViewer2> imageViewer =
+    vtkSmartPointer<vtkImageViewer2>::New();
+    imageViewer->SetInputData(input);
+    imageViewer->SetSize(640, 512);
+    imageViewer->SetupInteractor(renderWindowInteractor);
+    imageViewer->GetRenderer()->ResetCamera();
+    imageViewer->GetRenderer()->SetBackground(1,0,0); //red
 
-  return EXIT_SUCCESS;
+    renderWindowInteractor->Initialize();
+    renderWindowInteractor->Start();
+
+
+
+    fenetre.setLayout(layout_global);
+
+    fenetre.show();
+
+    return app.exec();
+
 }
