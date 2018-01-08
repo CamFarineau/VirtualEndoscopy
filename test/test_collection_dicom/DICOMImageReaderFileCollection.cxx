@@ -118,7 +118,6 @@ int main(int argc, char *argv[])
   imageViewer->SetupInteractor(renderWindowInteractor);
   //imageViewer->SetSlice(sliceNumber);
   imageViewer->SetSliceOrientationToYZ();
-  imageViewer->set
   std::cout<<"imageViewer->GetSliceOrientation()"<<imageViewer->GetSliceOrientation()<<std::endl;
   std::cout<<"imageViewer->GetSliceMax()"<<imageViewer->GetSliceMax()<<std::endl;
   std::cout<<"imageViewer->GetSliceMin()"<<imageViewer->GetSliceMin()<<std::endl;
