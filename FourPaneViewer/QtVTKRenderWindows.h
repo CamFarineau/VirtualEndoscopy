@@ -23,22 +23,12 @@ public:
 public slots:
 
   virtual void slotExit();
-  virtual void resliceMode(int);
-  virtual void thickMode(int);
-  virtual void SetBlendModeToMaxIP();
-  virtual void SetBlendModeToMinIP();
-  virtual void SetBlendModeToMeanIP();
-  virtual void SetBlendMode(int);
-  virtual void ResetViews();
-  virtual void Render();
-  virtual void AddDistanceMeasurementToView1();
-  virtual void AddDistanceMeasurementToView( int );
 
 protected:
   vtkSmartPointer< vtkResliceImageViewer > riw[3];
-  vtkSmartPointer< vtkImagePlaneWidget > planeWidget[3];
-  vtkSmartPointer< vtkDistanceWidget > DistanceWidget[3];
-  vtkSmartPointer< vtkResliceImageViewerMeasurements > ResliceMeasurements;
+  //vtkSmartPointer< vtkImagePlaneWidget > planeWidget[3];
+  //vtkSmartPointer< vtkDistanceWidget > DistanceWidget[3];
+  //vtkSmartPointer< vtkResliceImageViewerMeasurements > ResliceMeasurements;
 
 protected slots:
 
