@@ -24,8 +24,22 @@
 #include "vtkImageData.h"
 #include "vtkImageViewer2.h"
 #include "vtkRenderer.h"
+#include "vtkCamera.h"
 #include "vtkRenderWindowInteractor.h"
 #include "vtkTestUtilities.h"
+#include <vtkSmartPointer.h>
+#include <vtkMarchingCubes.h>
+#include <vtkVoxelModeller.h>
+#include <vtkActor.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkRenderWindow.h>
+#include "vtkGPUVolumeRayCastMapper.h"
+#include "vtkTestErrorObserver.h"
+#include "vtkColorTransferFunction.h"
+#include "vtkPiecewiseFunction.h"
+#include "vtkVolume.h"
+#include "vtkVolumeProperty.h"
+#include "vtkInteractorStyleTrackballCamera.h"
 
 
 int main(int argc, char *argv[])
@@ -39,7 +53,7 @@ int main(int argc, char *argv[])
 
   //char* dirName = vtkTestUtilities::ExpandDataFileName( argc, argv, "Data/dicom/collection" );
 
-  std::string directoryName = "/home/nico/Projet_Majeure/Head/";
+  std::string directoryName = argv[1];
   //delete [] dirName;
 
   vtkSmartPointer<vtkDICOMImageReader> DICOMReader =
@@ -110,6 +124,7 @@ int main(int argc, char *argv[])
      DICOMReader->GetOutput()->GetExtent()[4]) / 2;
 
   // Visualize
+  /*
   vtkSmartPointer<vtkImageViewer2> imageViewer =
     vtkSmartPointer<vtkImageViewer2>::New();
   imageViewer->SetInputConnection(DICOMReader->GetOutputPort());
@@ -118,7 +133,6 @@ int main(int argc, char *argv[])
   imageViewer->SetupInteractor(renderWindowInteractor);
   //imageViewer->SetSlice(sliceNumber);
   imageViewer->SetSliceOrientationToYZ();
-  imageViewer->set
   std::cout<<"imageViewer->GetSliceOrientation()"<<imageViewer->GetSliceOrientation()<<std::endl;
   std::cout<<"imageViewer->GetSliceMax()"<<imageViewer->GetSliceMax()<<std::endl;
   std::cout<<"imageViewer->GetSliceMin()"<<imageViewer->GetSliceMin()<<std::endl;
@@ -126,10 +140,45 @@ int main(int argc, char *argv[])
   imageViewer->SetSlice(200);
   imageViewer->Render();
   imageViewer->GetRenderer()->ResetCamera();
+  vtkCamera *camera = imageViewer->GetRenderer()->GetActiveCamera();
+  double angle = 180.0;
+  camera->Roll(angle);
   renderWindowInteractor->Initialize();
   imageViewer->Render();
 
-  renderWindowInteractor->Start();
+  renderWindowInteractor->Start();*/
+
+
+  //Marching Cubes
+  double isoValue = 800;
+  vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
+  vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
+  volume->DeepCopy(DICOMReader->GetOutput());
+  surface->SetInputData(volume);
+  surface->ComputeNormalsOn();
+  surface->SetValue(0,isoValue);
+
+  vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+  renderer->SetBackground(.1, .2, .3);
+
+  vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+  renderWindow->AddRenderer(renderer);
+
+  vtkSmartPointer<vtkRenderWindowInteractor> interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+  interactor->SetRenderWindow(renderWindow);
+
+  vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+  mapper->SetInputConnection(surface->GetOutputPort());
+  mapper->ScalarVisibilityOff();
+
+  vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+  actor->SetMapper(mapper);
+
+  renderer->AddActor(actor);
+
+  renderWindow->Render();
+  interactor->Start();
+
 
 
   return 0;
