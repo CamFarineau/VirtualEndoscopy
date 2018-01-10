@@ -1,3 +1,15 @@
+/*=========================================================================
+
+  Program:   Virtual Endoscopy
+  Module:    VirtualEndoscopy.cxx
+
+  Copyright (c) Camille Farineau; Nicolas Ranc
+  All rights reserved.
+
+  5 IMI - @CPELyon
+
+=========================================================================*/
+
 #include "vtkDICOMImageReader.h"
 #include "vtkImageData.h"
 #include <vtkRenderWindow.h>
