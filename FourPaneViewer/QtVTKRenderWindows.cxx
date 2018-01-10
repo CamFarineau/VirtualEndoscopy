@@ -95,7 +95,7 @@ QtVTKRenderWindows::QtVTKRenderWindows( int vtkNotUsed(argc), char *argv[])
 
 
   //Marching Cubes
-  double isoValue = 800;
+  double isoValue = -90;
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
   volume->DeepCopy(reader->GetOutput());
@@ -106,14 +106,12 @@ QtVTKRenderWindows::QtVTKRenderWindows( int vtkNotUsed(argc), char *argv[])
   vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
   surfaceRenderer->SetBackground(.1, .2, .3);
 
-  vtkSmartPointer<vtkRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+  vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
   surfaceRenderWindow->AddRenderer(surfaceRenderer);
 
-  vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+  this->ui->view4->SetRenderWindow(surfaceRenderWindow);
+  vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = this->ui->view4->GetInteractor();//vtkSmartPointer<vtkRenderWindowInteractor>::New();
   surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
-
-  //this->ui->view4->SetRenderWindow(surfaceRenderWindow);
-  //this->ui->view4->GetRenderWindow()->GetInteractor()->SetRenderWindow(surfaceRenderWindow);
 
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInputConnection(surface->GetOutputPort());
@@ -124,8 +122,10 @@ QtVTKRenderWindows::QtVTKRenderWindows( int vtkNotUsed(argc), char *argv[])
 
   surfaceRenderer->AddActor(actor);
 
-  surfaceRenderWindow->Render();
-  surfaceInteractor->Start();
+  //surfaceRenderWindow->Render();
+  //surfaceInteractor->Start();
+
+  //this->ui->view4->show();
 
   /*******************************************************/
   /*OLD CODE*/
