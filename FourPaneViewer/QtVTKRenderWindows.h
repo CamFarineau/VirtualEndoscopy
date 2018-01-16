@@ -18,6 +18,8 @@ public:
 
   // Constructor/Destructor
   QtVTKRenderWindows(int argc, char *argv[]);
+ // void QtVTKRenderWindows::init_map(std::map <std::string,bool>& map);
+
   ~QtVTKRenderWindows() override {}
 
 public slots:
