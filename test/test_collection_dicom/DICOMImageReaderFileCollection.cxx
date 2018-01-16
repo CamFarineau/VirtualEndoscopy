@@ -16,6 +16,8 @@
 // .SECTION Description
 //
 
+#include "KeyPressInteractorStyle.h"
+#include "vtkImageInteractionCallback.h"
 
 #include "vtkSmartPointer.h"
 
@@ -41,116 +43,178 @@
 #include "vtkVolumeProperty.h"
 #include "vtkInteractorStyleTrackballCamera.h"
 
+#include <vtkVersion.h>
+#include <vtkAssemblyPath.h>
+#include <vtkCell.h>
+#include <vtkCommand.h>
+#include <vtkCornerAnnotation.h>
+#include <vtkImageActor.h>
+#include <vtkInteractorStyleImage.h>
+#include <vtkPointData.h>
+#include <vtkPropPicker.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkTextProperty.h>
+#include <vtkImageNoiseSource.h>
+#include <vtkImageCast.h>
+#include <vtkMath.h>
+#include "vtkResliceImageViewer.h"
+
+#include <vtkObjectFactory.h>
+
+#include <QApplication>
+
+#include <vtkActor.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+
+#include <QVTKOpenGLWidget.h>
+#include <QSurfaceFormat>
+#include <QtCore/QVariant>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QWidget>
+#include "QVTKOpenGLWidget.h"
+
+using namespace std;
+
+vtkStandardNewMacro(KeyPressInteractorStyle);
 
 int main(int argc, char *argv[])
 {
 
-  /*if ( argc <= 1 )
+  if ( argc <= 1 )
   {
     cout << "Usage: " << argv[0] << " <dicom folder>" << endl;
     return 1;
-  }*/
-
-  //char* dirName = vtkTestUtilities::ExpandDataFileName( argc, argv, "Data/dicom/collection" );
+  }
 
   std::string directoryName = argv[1];
-  //delete [] dirName;
-
-  vtkSmartPointer<vtkDICOMImageReader> DICOMReader =
-    vtkSmartPointer<vtkDICOMImageReader>::New();
-
+  vtkSmartPointer<vtkDICOMImageReader> DICOMReader = vtkSmartPointer<vtkDICOMImageReader>::New();
   // Read the input files
   DICOMReader->SetDirectoryName(directoryName.c_str());
   cout << "Directory name: " << DICOMReader->GetDirectoryName() << endl;
-
   DICOMReader->Update();
 
-  // Read and display the image properties
-  const char* fileExtensions = DICOMReader->GetFileExtensions();
-  cout << "File extensions: " << fileExtensions << endl;
 
-  const char* descriptiveName = DICOMReader->GetDescriptiveName();
-  cout << "Descriptive name: " << descriptiveName << endl;
+  QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
+    QApplication app(argc, argv);
+    QMainWindow *QtVTKRenderWindows = new QMainWindow();
+    QtVTKRenderWindows->resize(1240, 850);
+     QWidget *main_widget = new QWidget();
+    QWidget *gridLayoutWidget = new QWidget(main_widget);
+    gridLayoutWidget->setGeometry(QRect(10, 30, 1221, 791));
+   QGridLayout *gridLayout_2 = new QGridLayout(gridLayoutWidget);
+    gridLayout_2->setContentsMargins(0, 0, 0, 0);
+    QVTKOpenGLWidget *view2 = new QVTKOpenGLWidget(gridLayoutWidget);
+    gridLayout_2->addWidget(view2, 1, 0, 1, 1);
+    QVTKOpenGLWidget *view4 = new QVTKOpenGLWidget(gridLayoutWidget);
+    view4->setObjectName(QStringLiteral("view4"));
+    gridLayout_2->addWidget(view4, 0, 1, 1, 1);
+    QVTKOpenGLWidget *view3 = new QVTKOpenGLWidget(gridLayoutWidget);
+    gridLayout_2->addWidget(view3, 1, 1, 1, 1);
+    QVTKOpenGLWidget* view1 = new QVTKOpenGLWidget(gridLayoutWidget);
+    gridLayout_2->addWidget(view1, 0, 0, 1, 1);
+    QtVTKRenderWindows->setCentralWidget(main_widget);
 
-  double* pixelSpacing = DICOMReader->GetPixelSpacing();
-  cout << "Pixel spacing: " << *pixelSpacing << endl;
+    vtkSmartPointer<vtkResliceImageViewer> imageViewer[3];
 
-  int width = DICOMReader->GetWidth();
-  cout << "Image width: " << width << endl;
-
-  int height = DICOMReader->GetHeight();
-  cout << "Image height: " << height << endl;
-
-  float* imagePositionPatient = DICOMReader->GetImagePositionPatient();
-  cout << "Image position patient: " << *imagePositionPatient << endl;
-
-  float* imageOrientationPatient = DICOMReader->GetImageOrientationPatient();
-  cout << "Image orientation patient: " << *imageOrientationPatient << endl;
-
-  int bitsAllocated = DICOMReader->GetBitsAllocated();
-  cout << "Bits allocated: " << bitsAllocated << endl;
-
-  int pixelRepresentation = DICOMReader->GetPixelRepresentation();
-  cout << "Pixel representation: " << pixelRepresentation << endl;
-
-  int numberOfComponents = DICOMReader->GetNumberOfComponents();
-  cout << "Number of components: " << numberOfComponents << endl;
-
-  const char* transferSyntaxUID = DICOMReader->GetTransferSyntaxUID();
-  cout << "Transfer syntax UID: " << transferSyntaxUID << endl;
-
-  float rescaleSlope = DICOMReader->GetRescaleSlope();
-  cout << "Rescale slope: " << rescaleSlope << endl;
-
-  float rescaleOffset = DICOMReader->GetRescaleOffset();
-  cout << "Rescale offset: " << rescaleOffset << endl;
-
-  const char* patientName = DICOMReader->GetPatientName();
-  cout << "Patient name: " << patientName << endl;
-
-  const char* studyUID = DICOMReader->GetStudyUID();
-  cout << "Study UID: " << studyUID << endl;
-
-  const char* studyID = DICOMReader->GetStudyID();
-  cout << "Study ID: " << studyID << endl;
-
-  float gantryAngle = DICOMReader->GetGantryAngle();
-  cout << "Gantry angle: " << gantryAngle << endl;
+    // Visualize
+    for(int i=0; i<3; i++)
+    {
+         imageViewer[i] = vtkSmartPointer<vtkResliceImageViewer>::New();
+         imageViewer[i]->SetInputData(DICOMReader->GetOutput());
+         vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+         imageViewer[i]->SetRenderWindow(renderWindow);
+    }
 
 
-  // Display the center slice
-  int sliceNumber =
-    (DICOMReader->GetOutput()->GetExtent()[5] +
-     DICOMReader->GetOutput()->GetExtent()[4]) / 2;
 
-  // Visualize
-  /*
-  vtkSmartPointer<vtkImageViewer2> imageViewer =
-    vtkSmartPointer<vtkImageViewer2>::New();
-  imageViewer->SetInputConnection(DICOMReader->GetOutputPort());
   vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
     vtkSmartPointer<vtkRenderWindowInteractor>::New();
-  imageViewer->SetupInteractor(renderWindowInteractor);
-  //imageViewer->SetSlice(sliceNumber);
-  imageViewer->SetSliceOrientationToYZ();
-  std::cout<<"imageViewer->GetSliceOrientation()"<<imageViewer->GetSliceOrientation()<<std::endl;
-  std::cout<<"imageViewer->GetSliceMax()"<<imageViewer->GetSliceMax()<<std::endl;
-  std::cout<<"imageViewer->GetSliceMin()"<<imageViewer->GetSliceMin()<<std::endl;
+  //imageViewer->SetupInteractor(widget.GetRenderWindow()->GetInteractor());
 
-  imageViewer->SetSlice(200);
-  imageViewer->Render();
-  imageViewer->GetRenderer()->ResetCamera();
-  vtkCamera *camera = imageViewer->GetRenderer()->GetActiveCamera();
-  double angle = 180.0;
-  camera->Roll(angle);
+  view1->SetRenderWindow(imageViewer[0]->GetRenderWindow());
+  imageViewer[0]->SetupInteractor(view1->GetInteractor());
+  view2->SetRenderWindow(imageViewer[1]->GetRenderWindow());
+  imageViewer[1]->SetupInteractor(view2->GetInteractor());
+  view3->SetRenderWindow(imageViewer[2]->GetRenderWindow());
+  imageViewer[2]->SetupInteractor(view3->GetInteractor());
+
+    //imageViewer->GetRenderWindow()->SetSize(800,800);
+  vtkSmartPointer< vtkCamera > camera[2];
+  vtkSmartPointer<vtkCornerAnnotation> cornerAnnotation[3];
+  vtkSmartPointer<vtkImageInteractionCallback> callback[3];
+  vtkSmartPointer<vtkPropPicker> propPicker[3];
+  vtkImageActor* imageActor[3];
+  vtkSmartPointer<KeyPressInteractorStyle> style[3];
+  for (int i = 0; i < 3; i++)
+  {
+      //Picker
+      // Get pixel coordinates
+      // Picker to pick pixels
+      propPicker[i] = vtkSmartPointer<vtkPropPicker>::New();
+      propPicker[i]->PickFromListOn();
+
+      // Give the picker a prop to pick
+      imageActor[i] = imageViewer[i]->GetImageActor();
+      propPicker[i]->AddPickList(imageActor[i]);
+
+      // disable interpolation, so we can see each pixel
+      imageActor[i]->InterpolateOff();
+
+
+      // Annotate the image with window/level and mouse over pixel
+      // information
+      cornerAnnotation[i] = vtkSmartPointer<vtkCornerAnnotation>::New();
+      cornerAnnotation[i]->SetLinearFontScaleFactor(2);
+      cornerAnnotation[i]->SetNonlinearFontScaleFactor(1);
+      cornerAnnotation[i]->SetMaximumFontSize(20);
+      cornerAnnotation[i]->SetText(0, "Off Image");
+      cornerAnnotation[i]->SetText(3, "<window>\n<level>");
+      cornerAnnotation[i]->GetTextProperty()->SetColor(1, 0, 0);
+
+      imageViewer[i]->GetRenderer()->AddViewProp(cornerAnnotation[i]);
+
+      // Callback listens to MouseMoveEvents invoked by the interactor's style
+       callback[i] = vtkSmartPointer<vtkImageInteractionCallback>::New();
+      callback[i]->SetViewer(imageViewer[i]);
+      callback[i]->SetAnnotation(cornerAnnotation[i]);
+      callback[i]->SetPicker(propPicker[i]);
+
+      style[i] = vtkSmartPointer<KeyPressInteractorStyle>::New();
+      style[i]->SetViewer(imageViewer[i]);
+      style[i]->SetAnnotation(cornerAnnotation[i]);
+      style[i]->SetPicker(propPicker[i]);
+      if(i==0)
+        view1->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
+      else if(i==1)
+          view2->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
+      else if(i==2)
+          view3->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
+      style[i]->AddObserver(vtkCommand::MouseMoveEvent, callback[i]);
+
+
+    imageViewer[i]->SetSliceOrientation(i);
+    imageViewer[i]->Render();
+    imageViewer[i]->GetRenderer()->ResetCamera();
+
+    if(i<2){
+       camera[i] =  imageViewer[i]->GetRenderer()->GetActiveCamera();
+       double rotation = 180.0;
+       camera[i]->Roll(rotation);
+    }
+  }
+
   renderWindowInteractor->Initialize();
-  imageViewer->Render();
-
-  renderWindowInteractor->Start();*/
+  renderWindowInteractor->Start();
 
 
   //Marching Cubes
-  double isoValue = 800;
+  double isoValue = -90;
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
   volume->DeepCopy(DICOMReader->GetOutput());
@@ -158,14 +222,15 @@ int main(int argc, char *argv[])
   surface->ComputeNormalsOn();
   surface->SetValue(0,isoValue);
 
-  vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-  renderer->SetBackground(.1, .2, .3);
+  vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
+  surfaceRenderer->SetBackground(.1, .2, .3);
 
-  vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-  renderWindow->AddRenderer(renderer);
+  vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+  surfaceRenderWindow->AddRenderer(surfaceRenderer);
 
-  vtkSmartPointer<vtkRenderWindowInteractor> interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
-  interactor->SetRenderWindow(renderWindow);
+  view4->SetRenderWindow(surfaceRenderWindow);
+  vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = view4->GetInteractor();
+  surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
 
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInputConnection(surface->GetOutputPort());
@@ -174,10 +239,15 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
 
-  renderer->AddActor(actor);
+  surfaceRenderer->AddActor(actor);
 
-  renderWindow->Render();
-  interactor->Start();
+  surfaceRenderWindow->Render();
+  surfaceInteractor->Start();
+
+  QtVTKRenderWindows->show();
+
+  app.exec();
+
 
 
 
