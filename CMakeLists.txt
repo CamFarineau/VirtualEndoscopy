@@ -1,25 +1,30 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
-PROJECT(ImageRender)
+project(ImageReaderDicomCollection)
 
-FIND_PACKAGE(Qt4 REQUIRED)
-FIND_PACKAGE(OpenGL REQUIRED)
-set(QT_USE_OPENGL TRUE)
-INCLUDE(${QT_USE_FILE})
+set(CMAKE_PREFIX_PATH /home/camille/VTK/)
+set(QT_QMAKE_EXECUTABLE /usr/lib/x86_64-linux-gnu/qt5/bin/qmake)
+set(VTK_DIR /home/camille/VTK/Build/)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
-
-set(CMAKE_PREFIX_PATH /home/nico/Documents/5A/Projet_Majeure/VTK/build/)
-find_package(VTK REQUIRED)
+find_package(VTK COMPONENTS
+  vtkGUISupportQt
+  vtkIOImage
+  vtkInteractionImage
+  vtkRenderingOpenGL2
+  vtkTestingCore
+)
 include(${VTK_USE_FILE})
 
-SET(CMAKE_BUILD_TYPE Debug)
-ADD_DEFINITIONS( -Wall -Wextra -std=c++11 -Wno-comment -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -DCORRECTION)
+if("${VTK_QT_VERSION}" STREQUAL "")
+  message(FATAL_ERROR "VTK was not built with Qt")
+endif()
 
+file(GLOB DICOMReader_SRC
+    "src/*.h"
+    "src/*.cxx"
+)
+find_package(Qt5 COMPONENTS Core REQUIRED QUIET)
 
-add_executable(ImageRender MACOSX_BUNDLE main.cpp )
-
-target_link_libraries(ImageRender ${VTK_LIBRARIES})
-TARGET_LINK_LIBRARIES(ImageRender -lm -ldl -lGLEW ${OPENGL_LIBRARIES} ${QT_LIBRARIES} ${QT_GL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
-
+add_executable(ImageReaderDicomCollection ${DICOMReader_SRC})
+qt5_use_modules(ImageReaderDicomCollection Core Gui Widgets)
+target_link_libraries(ImageReaderDicomCollection ${VTK_LIBRARIES})
