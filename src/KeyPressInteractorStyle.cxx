@@ -31,7 +31,7 @@ void KeyPressInteractorStyle::SetAnnotation(vtkCornerAnnotation *annotation)
     this->Annotation = annotation;
 }
 
-void KeyPressInteractorStyle::SetViewer(vtkImageViewer2 *viewer)
+void KeyPressInteractorStyle::SetViewer(vtkResliceImageViewer *viewer)
 {
     this->Viewer = viewer;
 }
@@ -45,6 +45,7 @@ void KeyPressInteractorStyle::OnKeyPress()
     if(key == "P" || key == "p")
     {
 
+        std::cout<<"level: "<<Viewer->GetColorLevel()<<" ,window: "<<Viewer->GetColorWindow()<<std::endl;
         coordonnees[0] = 0;
         coordonnees[1] = 0;
         coordonnees[2] = 0;

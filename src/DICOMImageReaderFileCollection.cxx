@@ -174,13 +174,13 @@ int main(int argc, char *argv[])
       cornerAnnotation[i]->SetNonlinearFontScaleFactor(1);
       cornerAnnotation[i]->SetMaximumFontSize(20);
       cornerAnnotation[i]->SetText(0, "Off Image");
-      cornerAnnotation[i]->SetText(3, "<window>\n<level>");
+      //cornerAnnotation[i]->SetText(3, "<window>\n<level>");
       cornerAnnotation[i]->GetTextProperty()->SetColor(1, 0, 0);
 
       imageViewer[i]->GetRenderer()->AddViewProp(cornerAnnotation[i]);
 
       // Callback listens to MouseMoveEvents invoked by the interactor's style
-       callback[i] = vtkSmartPointer<vtkImageInteractionCallback>::New();
+      callback[i] = vtkSmartPointer<vtkImageInteractionCallback>::New();
       callback[i]->SetViewer(imageViewer[i]);
       callback[i]->SetAnnotation(cornerAnnotation[i]);
       callback[i]->SetPicker(propPicker[i]);
@@ -189,16 +189,20 @@ int main(int argc, char *argv[])
       style[i]->SetViewer(imageViewer[i]);
       style[i]->SetAnnotation(cornerAnnotation[i]);
       style[i]->SetPicker(propPicker[i]);
+
       if(i==0)
-        view1->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
+          view1->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
       else if(i==1)
           view2->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
       else if(i==2)
           view3->GetRenderWindow()->GetInteractor()->SetInteractorStyle( style[i] );
+
       style[i]->AddObserver(vtkCommand::MouseMoveEvent, callback[i]);
 
 
     imageViewer[i]->SetSliceOrientation(i);
+    imageViewer[i]->SetColorLevel(-100);
+    imageViewer[i]->SetColorWindow(4000);
     imageViewer[i]->Render();
     imageViewer[i]->GetRenderer()->ResetCamera();
 
@@ -214,7 +218,11 @@ int main(int argc, char *argv[])
 
 
   //Marching Cubes
-  double isoValue = -90;
+  double isoValue;
+  std::cout<<"Please enter an isoValue for the Marching Cubes: ";
+  std::cin>>isoValue;
+  std::cout<<"The value you entered is "<<isoValue<<std::endl;
+
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
   volume->DeepCopy(DICOMReader->GetOutput());

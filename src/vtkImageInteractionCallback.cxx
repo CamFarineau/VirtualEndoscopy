@@ -26,7 +26,7 @@ void vtkImageInteractionCallback::SetAnnotation(vtkCornerAnnotation *annotation)
     this->Annotation = annotation;
 }
 
-void vtkImageInteractionCallback::SetViewer(vtkImageViewer2 *viewer)
+void vtkImageInteractionCallback::SetViewer(vtkResliceImageViewer *viewer)
 {
     this->Viewer = viewer;
 }
@@ -103,7 +103,6 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
         image_coordinate[2] = this->Viewer->GetSlice();
         break;
     }
-
 
     std::string message = "Location: ( ";
     message += vtkVariant(image_coordinate[0]).ToString();

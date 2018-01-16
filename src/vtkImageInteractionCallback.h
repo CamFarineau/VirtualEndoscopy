@@ -65,11 +65,11 @@ public:
   ~vtkImageInteractionCallback();
   void SetPicker(vtkPropPicker *picker);
   void SetAnnotation(vtkCornerAnnotation *annotation);
-  void SetViewer(vtkImageViewer2* viewer);
+  void SetViewer(vtkResliceImageViewer *viewer);
   virtual void Execute(vtkObject *, unsigned long vtkNotUsed(event), void *);
 
 private:
-  vtkImageViewer2*      Viewer;      // Pointer to the viewer
+  vtkResliceImageViewer*      Viewer;      // Pointer to the viewer
   vtkPropPicker*        Picker;      // Pointer to the picker
   vtkCornerAnnotation*  Annotation;  // Pointer to the annotation
 };
