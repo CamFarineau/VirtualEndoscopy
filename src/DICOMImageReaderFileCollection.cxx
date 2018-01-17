@@ -60,6 +60,7 @@
 #include <vtkImageCast.h>
 #include <vtkMath.h>
 #include "vtkResliceImageViewer.h"
+#include "vtkOBBTree.h"
 
 #include <vtkObjectFactory.h>
 
@@ -231,6 +232,8 @@ int main(int argc, char *argv[])
   volume->DeepCopy(DICOMReader->GetOutput());
   surface->SetInputData(volume);
   surface->ComputeNormalsOn();
+  surface->ComputeGradientsOn();
+  surface->ComputeScalarsOn();
   surface->SetValue(0,isoValue);
 
   vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
@@ -259,6 +262,36 @@ int main(int argc, char *argv[])
   mapper->ScalarVisibilityOff();
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
+
+  /*********************************************/
+
+//  // Create the tree
+//  vtkSmartPointer<vtkOBBTree> obbTree =
+//    vtkSmartPointer<vtkOBBTree>::New();
+//  obbTree->SetDataSet(inputSource->GetOutput());
+//  obbTree->BuildLocator();
+
+//  // Initialize the representation
+//  vtkSmartPointer<vtkPolyData> polydata =
+//    vtkSmartPointer<vtkPolyData>::New();
+//  obbTree->GenerateRepresentation(0, polydata);
+
+//  vtkSmartPointer<vtkPolyDataMapper> obbtreeMapper =
+//    vtkSmartPointer<vtkPolyDataMapper>::New();
+//#if VTK_MAJOR_VERSION <= 5
+//  obbtreeMapper->SetInputConnection(polydata->GetProducerPort());
+//#else
+//  obbtreeMapper->SetInputData(polydata);
+//#endif
+
+//  vtkSmartPointer<vtkActor> obbtreeActor =
+//    vtkSmartPointer<vtkActor>::New();
+//  obbtreeActor->SetMapper(obbtreeMapper);
+//  obbtreeActor->GetProperty()->SetInterpolationToFlat();
+//  obbtreeActor->GetProperty()->SetRepresentationToWireframe();
+
+
+  /*********************************************/
 
   surfaceRenderer->AddActor(actor);
 
