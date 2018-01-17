@@ -228,7 +228,6 @@ int main(int argc, char *argv[])
 
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
-  volum
   volume->DeepCopy(DICOMReader->GetOutput());
   surface->SetInputData(volume);
   surface->ComputeNormalsOn();
