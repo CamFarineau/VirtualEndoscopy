@@ -41,7 +41,6 @@ class KeyPressInteractorStyle : public vtkInteractorStyleImage
     vtkSmartPointer<vtkCamera> camera;
     static KeyPressInteractorStyle* New();
 
-    void SetCamera(const vtkSmartPointer<vtkCamera>& camera_);
     void SetPicker(vtkPropPicker *picker);
     void SetAnnotation(vtkCornerAnnotation *annotation);
     void SetViewer(vtkResliceImageViewer *viewer);
