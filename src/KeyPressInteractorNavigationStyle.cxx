@@ -15,8 +15,9 @@ void KeyPressInteractorNavigationStyle::SetCamera(const vtkSmartPointer<vtkCamer
     camera=camera_;
 }
 
-void KeyPressInteractorNavigationStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& interactor){
-    Interactor=interactor;
+void KeyPressInteractorNavigationStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& Interactor){
+    this->Interactor=Interactor;
+
 }
 
 
@@ -28,6 +29,7 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 
   // Output the key that was pressed
   std::cout << "Pressed " << key << std::endl;
+  camera->SetDistance(1);
 
   // Handle an arrow key
   if(key == "Up")
@@ -61,9 +63,10 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 
   if(key == "Escape")
     {
-        exit(0);
+    exit(0);
     }
-
+  double dis[2]={0.5,1000.0};
+  camera->SetClippingRange(dis);
   camera->SetDistance(1);
   this->Interactor->GetRenderWindow()->Render();
   vtkInteractorStyleTrackballCamera::OnKeyPress();

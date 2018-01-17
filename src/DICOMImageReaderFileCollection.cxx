@@ -43,6 +43,8 @@
 #include "vtkVolume.h"
 #include "vtkVolumeProperty.h"
 #include "vtkInteractorStyleTrackballCamera.h"
+#include "vtkAxesActor.h"
+
 
 #include <vtkVersion.h>
 #include <vtkAssemblyPath.h>
@@ -59,6 +61,11 @@
 #include <vtkImageNoiseSource.h>
 #include <vtkImageCast.h>
 #include <vtkMath.h>
+#include <vtkVertexGlyphFilter.h>
+#include <vtkUnsignedCharArray.h>
+#include <vtkOrientationMarkerWidget.h>
+
+
 #include "vtkResliceImageViewer.h"
 #include "vtkOBBTree.h"
 
@@ -80,6 +87,12 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QWidget>
 #include "QVTKOpenGLWidget.h"
+
+
+// For compatibility with new VTK generic data arrays
+#ifdef vtkGenericDataArray_h
+#define InsertNextTupleValue InsertNextTypedTuple
+#endif
 
 using namespace std;
 
@@ -103,14 +116,14 @@ int main(int argc, char *argv[])
   DICOMReader->Update();
 
 
-  QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
     QApplication app(argc, argv);
     QMainWindow *QtVTKRenderWindows = new QMainWindow();
     QtVTKRenderWindows->resize(1240, 850);
-     QWidget *main_widget = new QWidget();
+    QWidget *main_widget = new QWidget();
     QWidget *gridLayoutWidget = new QWidget(main_widget);
     gridLayoutWidget->setGeometry(QRect(10, 30, 1221, 791));
-   QGridLayout *gridLayout_2 = new QGridLayout(gridLayoutWidget);
+    QGridLayout *gridLayout_2 = new QGridLayout(gridLayoutWidget);
     gridLayout_2->setContentsMargins(0, 0, 0, 0);
     QVTKOpenGLWidget *view2 = new QVTKOpenGLWidget(gridLayoutWidget);
     gridLayout_2->addWidget(view2, 1, 0, 1, 1);
@@ -148,15 +161,15 @@ int main(int argc, char *argv[])
   imageViewer[2]->SetupInteractor(view3->GetInteractor());
 
     //imageViewer->GetRenderWindow()->SetSize(800,800);
-  vtkSmartPointer< vtkCamera > camera[2];
+  vtkSmartPointer<vtkCamera> camera[2];
   vtkSmartPointer<vtkCornerAnnotation> cornerAnnotation[3];
   vtkSmartPointer<vtkImageInteractionCallback> callback[3];
   vtkSmartPointer<vtkPropPicker> propPicker[3];
   vtkImageActor* imageActor[3];
-  vtkSmartPointer<KeyPressInteractorStyle> style[4];
+  vtkSmartPointer<KeyPressInteractorStyle> style[3];
   for (int i = 0; i < 3; i++)
   {
-      //Picker
+      // Picker
       // Get pixel coordinates
       // Picker to pick pixels
       propPicker[i] = vtkSmartPointer<vtkPropPicker>::New();
@@ -230,6 +243,11 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
   volume->DeepCopy(DICOMReader->GetOutput());
+
+
+  double middlePoint[3];
+
+
   surface->SetInputData(volume);
   surface->ComputeNormalsOn();
   surface->ComputeGradientsOn();
@@ -239,27 +257,31 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
   surfaceRenderer->SetBackground(.1, .2, .3);
 
-  vtkSmartPointer<vtkCamera> aCamera =   vtkSmartPointer<vtkCamera>::New();
-    aCamera->SetPosition(450,
-                         1000,
-                         0);
-    aCamera->SetFocalPoint(250,
-                           250,
-                           70);
-   aCamera->SetViewUp(0,0,-1);
-
-   surfaceRenderer->SetActiveCamera(aCamera);
-
   vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
   surfaceRenderWindow->AddRenderer(surfaceRenderer);
 
   view4->SetRenderWindow(surfaceRenderWindow);
   vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = view4->GetInteractor();
   surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
-  view4->GetInteractor()->SetInteractorStyle( style[3] );
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInputConnection(surface->GetOutputPort());
   mapper->ScalarVisibilityOff();
+
+  double bounds[6];
+  mapper->GetBounds(bounds);
+  //surface->GetOutput()->GetBounds(bounds);
+  middlePoint[0] = (bounds[1] + bounds[0])/2;
+  middlePoint[1] = (bounds[3] + bounds[2])/2;
+  middlePoint[2] = (bounds[5] + bounds[4])/2;
+
+  vtkSmartPointer<vtkCamera> aCamera =   vtkSmartPointer<vtkCamera>::New();
+  aCamera =  surfaceRenderer->GetActiveCamera();
+
+  aCamera->SetPosition(450, 1000, 0);
+  aCamera->SetFocalPoint(middlePoint[0], middlePoint[1],middlePoint[2]);
+  aCamera->SetViewUp(0,0,-1);
+
+
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
 
@@ -294,22 +316,35 @@ int main(int argc, char *argv[])
   /*********************************************/
 
   surfaceRenderer->AddActor(actor);
-
+  surfaceRenderer->ResetCameraClippingRange();
   surfaceRenderWindow->Render();
 
   vtkSmartPointer<KeyPressInteractorNavigationStyle> styleNav =vtkSmartPointer<KeyPressInteractorNavigationStyle>::New();
   styleNav->SetCamera(aCamera);
-  styleNav->SetInteractor(view4->GetInteractor());
+  styleNav->SetInteractor(surfaceInteractor);
   surfaceInteractor->SetInteractorStyle( styleNav );
 
+ for(int j=0;j<3;j++){
+    style[j]->SetCamera(aCamera);
+    style[j]->SetInteractor(surfaceInteractor);
+  }
+
+  vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
+  vtkSmartPointer<vtkOrientationMarkerWidget> widget =
+  vtkSmartPointer<vtkOrientationMarkerWidget>::New();
+  widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+  widget->SetOrientationMarker( axes );
+  widget->SetInteractor( surfaceInteractor );
+  widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
+  widget->SetEnabled( 1 );
+  widget->InteractiveOn();
+
+
   std::cout<<"Cam deb: X: "<<aCamera->GetPosition()[0]<<" Y: "<<aCamera->GetPosition()[1]<<" Z: "<<aCamera->GetPosition()[2]<<std::endl;
+
   surfaceInteractor->Start();
   QtVTKRenderWindows->show();
 
   app.exec();
-
-
-
-
   return 0;
 }

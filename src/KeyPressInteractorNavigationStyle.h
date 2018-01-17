@@ -1,7 +1,6 @@
 #ifndef KEYPRESSINTERACTORNAVIGATIONSTYLE_H
 #define KEYPRESSINTERACTORNAVIGATIONSTYLE_H
 
-
 #include <vtkVersion.h>
 #include <vtkAssemblyPath.h>
 #include <vtkCell.h>

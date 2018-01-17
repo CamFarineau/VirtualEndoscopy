@@ -6,6 +6,8 @@ KeyPressInteractorStyle::KeyPressInteractorStyle()
     this->Viewer     = NULL;
     this->Picker     = NULL;
     this->Annotation = NULL;
+    this->Camera     = NULL;
+    this->Interactor = NULL;
     coordonnees[0] = 0;
     coordonnees[1] = 0;
     coordonnees[2] = 0;
@@ -16,10 +18,9 @@ KeyPressInteractorStyle::~KeyPressInteractorStyle()
     this->Viewer     = NULL;
     this->Picker     = NULL;
     this->Annotation = NULL;
+    this->Camera     = NULL;
+    this->Interactor = NULL;
 }
-
-
-
 
 void KeyPressInteractorStyle::SetPicker(vtkPropPicker *picker)
 {
@@ -36,11 +37,23 @@ void KeyPressInteractorStyle::SetViewer(vtkResliceImageViewer *viewer)
     this->Viewer = viewer;
 }
 
+void KeyPressInteractorStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera)
+{
+    this->Camera=camera;
+}
+
+void KeyPressInteractorStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& Interactor)
+{
+    this->Interactor=Interactor;
+}
+
 void KeyPressInteractorStyle::OnKeyPress()
 {
     // Get the keypress
-    vtkRenderWindowInteractor *rwi = this->Interactor;
+    vtkRenderWindowInteractor *rwi = this->Viewer->GetRenderWindow()->GetInteractor();
+    std::cout<<"KeyPressInteractorStyle"<<std::endl;
     std::string key = rwi->GetKeySym();
+    std::cout<<"key"<<key<<std::endl;
 
     // Output the key that was pressed
     if(key == "P" || key == "p")
@@ -58,9 +71,9 @@ void KeyPressInteractorStyle::OnKeyPress()
         vtkInteractorStyleImage *style = vtkInteractorStyleImage::SafeDownCast(
                     interactor->GetInteractorStyle());
 
-#if VTK_MAJOR_VERSION <= 5
-        image->Update();
-#endif
+        #if VTK_MAJOR_VERSION <= 5
+                image->Update();
+        #endif
 
 
         //Pick at the mouse location provided by the interactor
@@ -121,11 +134,13 @@ void KeyPressInteractorStyle::OnKeyPress()
             coordonnees[2] = this->Viewer->GetSlice();
             break;
         }
-        std::cout<<"X: "<<coordonnees[0]<<", Y: "<<coordonnees[1]<<", Z: "<<coordonnees[2]<<std::endl;
+        Camera->SetPosition(coordonnees[0],coordonnees[1],coordonnees[2]);
+        //surfaceRenderer->ResetCameraClippingRange();
+
+        this->Interactor->GetRenderWindow()->Render();
 
         //interactor->Render();
     }
-
     vtkInteractorStyleImage::OnKeyPress();
 
 }

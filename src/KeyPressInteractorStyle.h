@@ -38,18 +38,25 @@ class KeyPressInteractorStyle : public vtkInteractorStyleImage
     ~KeyPressInteractorStyle();
     vtkTypeMacro(KeyPressInteractorStyle, vtkInteractorStyleImage);
     int coordonnees[3];
-    vtkSmartPointer<vtkCamera> camera;
     static KeyPressInteractorStyle* New();
+
+    void SetCamera(const vtkSmartPointer<vtkCamera>& camera);
+
 
     void SetPicker(vtkPropPicker *picker);
     void SetAnnotation(vtkCornerAnnotation *annotation);
     void SetViewer(vtkResliceImageViewer *viewer);
+    void SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& interactor);
+
     virtual void OnKeyPress();
 
 private:
   vtkResliceImageViewer*    Viewer;      // Pointer to the viewer
   vtkPropPicker*        Picker;      // Pointer to the picker
   vtkCornerAnnotation*  Annotation;  // Pointer to the annotation
+  vtkSmartPointer<vtkCamera> Camera; // Pointer to the camera
+  vtkSmartPointer<vtkRenderWindowInteractor> Interactor; // Pointer to the interactor
+
 };
 
 
