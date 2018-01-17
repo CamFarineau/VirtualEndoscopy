@@ -8,5 +8,8 @@ Software:
 3D Reconstruction:
 - https://www.vtk.org/Wiki/VTK/Examples/Cxx/Modelling/MarchingCubes
 
+Navigation with PS4 Dualshock 4 controller:
+- https://github.com/chrippa/ds4drv
+
 Other:
 - http://groups.csail.mit.edu/vision/medical-vision/virtual-endoscopy
