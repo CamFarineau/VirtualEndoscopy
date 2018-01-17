@@ -17,6 +17,7 @@
 //
 
 #include "KeyPressInteractorStyle.h"
+#include "KeyPressInteractorNavigationStyle.h"
 #include "vtkImageInteractionCallback.h"
 
 #include "vtkSmartPointer.h"
@@ -82,6 +83,7 @@
 using namespace std;
 
 vtkStandardNewMacro(KeyPressInteractorStyle);
+vtkStandardNewMacro(KeyPressInteractorNavigationStyle);
 
 int main(int argc, char *argv[])
 {
@@ -150,7 +152,7 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkImageInteractionCallback> callback[3];
   vtkSmartPointer<vtkPropPicker> propPicker[3];
   vtkImageActor* imageActor[3];
-  vtkSmartPointer<KeyPressInteractorStyle> style[3];
+  vtkSmartPointer<KeyPressInteractorStyle> style[4];
   for (int i = 0; i < 3; i++)
   {
       //Picker
@@ -218,10 +220,11 @@ int main(int argc, char *argv[])
 
 
   //Marching Cubes
-  double isoValue;
-  std::cout<<"Please enter an isoValue for the Marching Cubes: ";
+  double isoValue=90;
+  /*std::cout<<"Please enter an isoValue for the Marching Cubes: ";
   std::cin>>isoValue;
-  std::cout<<"The value you entered is "<<isoValue<<std::endl;
+  std::cout<<"The value you entered is "<<isoValue<<std::endl;*/
+
 
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
@@ -233,25 +236,41 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
   surfaceRenderer->SetBackground(.1, .2, .3);
 
+  vtkSmartPointer<vtkCamera> aCamera =   vtkSmartPointer<vtkCamera>::New();
+    aCamera->SetPosition(450,
+                         1000,
+                         0);
+    aCamera->SetFocalPoint(250,
+                           250,
+                           70);
+   aCamera->SetViewUp(0,0,-1);
+
+   surfaceRenderer->SetActiveCamera(aCamera);
+
   vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
   surfaceRenderWindow->AddRenderer(surfaceRenderer);
 
   view4->SetRenderWindow(surfaceRenderWindow);
   vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = view4->GetInteractor();
   surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
-
+  view4->GetInteractor()->SetInteractorStyle( style[3] );
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInputConnection(surface->GetOutputPort());
   mapper->ScalarVisibilityOff();
-
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
 
   surfaceRenderer->AddActor(actor);
 
   surfaceRenderWindow->Render();
-  surfaceInteractor->Start();
 
+  vtkSmartPointer<KeyPressInteractorNavigationStyle> styleNav =vtkSmartPointer<KeyPressInteractorNavigationStyle>::New();
+  styleNav->SetCamera(aCamera);
+  styleNav->SetInteractor(view4->GetInteractor());
+  surfaceInteractor->SetInteractorStyle( styleNav );
+
+  std::cout<<"Cam deb: X: "<<aCamera->GetPosition()[0]<<" Y: "<<aCamera->GetPosition()[1]<<" Z: "<<aCamera->GetPosition()[2]<<std::endl;
+  surfaceInteractor->Start();
   QtVTKRenderWindows->show();
 
   app.exec();
