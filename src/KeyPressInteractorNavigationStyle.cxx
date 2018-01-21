@@ -88,7 +88,7 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 
   Sphere->SetCenter(camera->GetPosition());
   //intersectionPolyDataFilter->Update();
-  std::cout<<"Inters: "<<intersectionPolyDataFilter->GetNumberOfIntersectionPoints()<<std::endl;
+  //std::cout<<"Inters: "<<intersectionPolyDataFilter->GetNumberOfIntersectionPoints()<<std::endl;
 
   this->Interactor->GetRenderWindow()->Render();
   //std::cout<<"X: "<<camera->GetPosition()[0]<<" , Y: "<<camera->GetPosition()[1]<<" , Z: "<<camera->GetPosition()[2]<<std::endl;

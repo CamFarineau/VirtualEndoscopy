@@ -378,11 +378,6 @@ int main(int argc, char *argv[])
   cameraActor->SetCamera(aCamera);
   cameraActor->GetProperty()->SetColor(0, 0, 0);
 
-   // (Xmin,Xmax,Ymin,Ymax,Zmin,Zmax).
-   double* bounds = new double[6];
-   bounds = cameraActor->GetBounds();
-   std::cout << "bounds: " << bounds[0] << " " << bounds[1] << " " << bounds[2] << " " <<
-       bounds[3] << " " << bounds[4] << " " << bounds[5] << std::endl;
 
 
 
