@@ -68,8 +68,18 @@
 
 #include "vtkResliceImageViewer.h"
 #include "vtkOBBTree.h"
-
+#include <vtkProperty.h>
+#include <vtkStripper.h>
+#include "vtkOutlineFilter.h"
+#include "vtkFixedPointVolumeRayCastMapper.h"
+#include "vtkCameraActor.h"
+#include "vtkCallbackCommand.h"
+#include "vtkSelectEnclosedPoints.h"
+#include "vtkDecimatePro.h"
+#include "vtkSliderRepresentation2D.h"
+#include "vtkSliderWidget.h"
 #include <vtkObjectFactory.h>
+#include "vtkSphereSource.h"
 
 #include <QApplication>
 
@@ -98,6 +108,54 @@ using namespace std;
 
 vtkStandardNewMacro(KeyPressInteractorStyle);
 vtkStandardNewMacro(KeyPressInteractorNavigationStyle);
+
+
+auto NumberofTriangles = [](vtkPolyData* pd) {
+  vtkCellArray* cells = pd->GetPolys();
+  vtkIdType npts = 0;
+  vtkIdType* pts;
+  auto numOfTriangles = 0;
+  for (auto i = 0; i < pd->GetNumberOfPolys(); ++i)
+  {
+    int c = cells->GetNextCell(npts, pts);
+    if (c == 0)
+    {
+      break;
+    }
+    // If a cell has three points it is a triangle.
+    if (npts == 3)
+    {
+      numOfTriangles++;
+    }
+  }
+  return numOfTriangles;
+};
+
+
+class vtkSliderCallback : public vtkCommand
+{
+public:
+  static vtkSliderCallback *New()
+    {
+    return new vtkSliderCallback;
+    }
+
+  vtkSliderCallback():OBBTree(0), Level(0), PolyData(0), Renderer(0){}
+
+  virtual void Execute(vtkObject *caller, unsigned long, void*)
+    {
+    vtkSliderWidget *sliderWidget =
+      reinterpret_cast<vtkSliderWidget*>(caller);
+    this->Level = vtkMath::Round(static_cast<vtkSliderRepresentation *>(sliderWidget->GetRepresentation())->GetValue());
+    this->OBBTree->GenerateRepresentation(this->Level, this->PolyData);
+    this->Renderer->Render();
+    }
+
+  vtkSmartPointer<vtkOBBTree> OBBTree;
+  int Level;
+  vtkSmartPointer<vtkPolyData> PolyData;
+  vtkSmartPointer<vtkRenderer> Renderer;
+};
 
 int main(int argc, char *argv[])
 {
@@ -234,7 +292,7 @@ int main(int argc, char *argv[])
 
 
   //Marching Cubes
-  double isoValue=90;
+  double isoValue=-90;
   /*std::cout<<"Please enter an isoValue for the Marching Cubes: ";
   std::cin>>isoValue;
   std::cout<<"The value you entered is "<<isoValue<<std::endl;*/
@@ -253,6 +311,32 @@ int main(int argc, char *argv[])
   surface->ComputeGradientsOn();
   surface->ComputeScalarsOn();
   surface->SetValue(0,isoValue);
+  //surface->GenerateValues(5,-120,0);
+
+    surface->Update();
+    std::cout << "Before Decimation." << std::endl;
+     std::cout << "There are: " << NumberofTriangles(surface->GetOutput())
+               << " triangles." << std::endl;
+
+     vtkSmartPointer<vtkDecimatePro> deci = vtkSmartPointer<vtkDecimatePro>::New();
+     deci->SetInputConnection(surface->GetOutputPort());
+     deci->SetTargetReduction(0.95);
+     deci->SetAbsoluteError(0.05);
+     deci->SetFeatureAngle(30);
+     deci->SetErrorIsAbsolute(1);
+     deci->AccumulateErrorOn();
+     deci->PreserveTopologyOff();
+     deci->SplittingOn();
+     deci->BoundaryVertexDeletionOn();
+     // deci->SplittingOff();
+     deci->Update();
+     std::cout << "After Decimation." << std::endl;
+     std::cout << "There are: " << NumberofTriangles(deci->GetOutput())
+               << " triangles." << std::endl;
+
+
+  vtkSmartPointer<vtkStripper> surfaceStripper = vtkSmartPointer<vtkStripper>::New();
+  surfaceStripper->SetInputConnection(deci->GetOutputPort());
 
   vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
   surfaceRenderer->SetBackground(.1, .2, .3);
@@ -264,7 +348,7 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = view4->GetInteractor();
   surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputConnection(surface->GetOutputPort());
+  mapper->SetInputConnection(surfaceStripper->GetOutputPort());
   mapper->ScalarVisibilityOff();
 
   double bounds[6];
@@ -284,44 +368,66 @@ int main(int argc, char *argv[])
 
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
+  actor->GetProperty()->SetDiffuseColor(1, .49, .25);
+  actor->GetProperty()->SetSpecular(.3);
+  actor->GetProperty()->SetSpecularPower(20);
+
+  //actor->GetProperty()->BackfaceCullingOn();
+
+  vtkSmartPointer<vtkCameraActor> cameraActor = vtkSmartPointer<vtkCameraActor>::New();
+  cameraActor->SetCamera(aCamera);
+  cameraActor->GetProperty()->SetColor(0, 0, 0);
+
+   // (Xmin,Xmax,Ymin,Ymax,Zmin,Zmax).
+   double* bounds = new double[6];
+   bounds = cameraActor->GetBounds();
+   std::cout << "bounds: " << bounds[0] << " " << bounds[1] << " " << bounds[2] << " " <<
+       bounds[3] << " " << bounds[4] << " " << bounds[5] << std::endl;
+
+
+
+  /*************************************************/
+
+   vtkSmartPointer<vtkSphereSource> source = vtkSmartPointer<vtkSphereSource>::New();
+
+   double radius = 1.0;
+   source->SetRadius(radius);
+   source->SetCenter(aCamera->GetPosition());
+   source->SetPhiResolution(11);
+   source->SetThetaResolution(21);
+   vtkSmartPointer<vtkPolyDataMapper> mapper_camera =
+           vtkSmartPointer<vtkPolyDataMapper>::New();
+   mapper_camera->SetInputConnection ( source->GetOutputPort());
+   vtkSmartPointer<vtkActor> actor_camera =
+           vtkSmartPointer<vtkActor>::New();
+   actor_camera->SetMapper ( mapper_camera );
+   double r, g, b;
+   r = vtkMath::Random(.4, 1.0);
+   g = vtkMath::Random(.4, 1.0);
+   b = vtkMath::Random(.4, 1.0);
+   actor_camera->GetProperty()->SetDiffuseColor(r, g, b);
+   actor_camera->GetProperty()->SetDiffuse(.2);
+   actor_camera->GetProperty()->SetSpecular(.2);
+   actor_camera->GetProperty()->SetSpecularColor(1.0,1.0,1.0);
+   actor_camera->GetProperty()->SetSpecularPower(30.0);
+   actor_camera->GetProperty()->SetOpacity(0.4);
+   surfaceRenderer->AddActor ( actor_camera );
 
   /*********************************************/
 
-//  // Create the tree
-//  vtkSmartPointer<vtkOBBTree> obbTree =
-//    vtkSmartPointer<vtkOBBTree>::New();
-//  obbTree->SetDataSet(inputSource->GetOutput());
-//  obbTree->BuildLocator();
-
-//  // Initialize the representation
-//  vtkSmartPointer<vtkPolyData> polydata =
-//    vtkSmartPointer<vtkPolyData>::New();
-//  obbTree->GenerateRepresentation(0, polydata);
-
-//  vtkSmartPointer<vtkPolyDataMapper> obbtreeMapper =
-//    vtkSmartPointer<vtkPolyDataMapper>::New();
-//#if VTK_MAJOR_VERSION <= 5
-//  obbtreeMapper->SetInputConnection(polydata->GetProducerPort());
-//#else
-//  obbtreeMapper->SetInputData(polydata);
-//#endif
-
-//  vtkSmartPointer<vtkActor> obbtreeActor =
-//    vtkSmartPointer<vtkActor>::New();
-//  obbtreeActor->SetMapper(obbtreeMapper);
-//  obbtreeActor->GetProperty()->SetInterpolationToFlat();
-//  obbtreeActor->GetProperty()->SetRepresentationToWireframe();
-
-
-  /*********************************************/
-
+  deci->Update();
   surfaceRenderer->AddActor(actor);
   surfaceRenderer->ResetCameraClippingRange();
+  // Finally, add the volume to the renderer
+
   surfaceRenderWindow->Render();
 
   vtkSmartPointer<KeyPressInteractorNavigationStyle> styleNav =vtkSmartPointer<KeyPressInteractorNavigationStyle>::New();
   styleNav->SetCamera(aCamera);
-  styleNav->SetInteractor(surfaceInteractor);
+  styleNav->SetInteractor(view4->GetInteractor());
+  styleNav->SetSurface(surface->GetOutput());
+  styleNav->SetSphere(source);
+  styleNav->SetInteractionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
 
  for(int j=0;j<3;j++){
