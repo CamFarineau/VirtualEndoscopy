@@ -1,3 +1,13 @@
+/*
+**    CPE Lyon
+**    Copyright (C) 2018 Camille FARINEAU / Nicolas Ranc
+**    Projet Majeur - Virtual Endoscopy
+**
+**    KeyPressInteractorNavigationStyle.h
+**    Interactor Style for the 3D Viewer : handle key event (to move the camera in the scene)
+*/
+
+
 #ifndef KEYPRESSINTERACTORNAVIGATIONSTYLE_H
 #define KEYPRESSINTERACTORNAVIGATIONSTYLE_H
 
@@ -33,7 +43,9 @@
 #include "vtkIntersectionPolyDataFilter.h"
 #include "vtkCellLocator.h"
 
-
+/**
+ * @brief The KeyPressInteractorNavigationStyle class: class use to interact with the 3D Viewer with the keyboard (move the camera in the scene)
+ */
 class KeyPressInteractorNavigationStyle : public vtkInteractorStyleTrackballCamera
 {
 public:
