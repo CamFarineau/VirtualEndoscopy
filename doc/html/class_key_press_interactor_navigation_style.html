@@ -87,6 +87,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_key_press_interactor_navigation_style-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">KeyPressInteractorNavigationStyle Class Reference</div>  </div>
@@ -134,6 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a44ade33ec3e126a412312252af260fbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a44ade33ec3e126a412312252af260fbb">SetSurface</a> (const vtkSmartPointer&lt; vtkPolyData &gt; &amp;surface)</td></tr>
 <tr class="memdesc:a44ade33ec3e126a412312252af260fbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular iso-surface to interact with.  <a href="#a44ade33ec3e126a412312252af260fbb">More...</a><br /></td></tr>
 <tr class="separator:a44ade33ec3e126a412312252af260fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5873d911f16a39d8f8dfd7b29d2557d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a5873d911f16a39d8f8dfd7b29d2557d2">SetSurfaceCollision</a> (const vtkSmartPointer&lt; vtkDecimatePro &gt; &amp;surface_col)</td></tr>
+<tr class="memdesc:a5873d911f16a39d8f8dfd7b29d2557d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular iso-surface to interact with.  <a href="#a5873d911f16a39d8f8dfd7b29d2557d2">More...</a><br /></td></tr>
+<tr class="separator:a5873d911f16a39d8f8dfd7b29d2557d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace8105bf81e1a9dcd052d54df8ff1687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#ace8105bf81e1a9dcd052d54df8ff1687">SetSphere</a> (const vtkSmartPointer&lt; vtkSphereSource &gt; &amp;sphere)</td></tr>
 <tr class="memdesc:ace8105bf81e1a9dcd052d54df8ff1687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular sphere representing the camera bounding box.  <a href="#ace8105bf81e1a9dcd052d54df8ff1687">More...</a><br /></td></tr>
 <tr class="separator:ace8105bf81e1a9dcd052d54df8ff1687"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,6 +156,68 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a92b934a4196498c303029fb62eb90f6a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_key_press_interactor_navigation_style.html">KeyPressInteractorNavigationStyle</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a92b934a4196498c303029fb62eb90f6a">New</a> ()</td></tr>
 <tr class="memdesc:a92b934a4196498c303029fb62eb90f6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">New instance of <a class="el" href="class_key_press_interactor_navigation_style.html" title="The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keybo...">KeyPressInteractorNavigationStyle</a>.  <a href="#a92b934a4196498c303029fb62eb90f6a">More...</a><br /></td></tr>
 <tr class="separator:a92b934a4196498c303029fb62eb90f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a2f5d424df03075c9baf308481bf02b45"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f5d424df03075c9baf308481bf02b45"></a>
+vtkSmartPointer&lt; vtkPolyData &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a2f5d424df03075c9baf308481bf02b45">nearestSurface</a></td></tr>
+<tr class="memdesc:a2f5d424df03075c9baf308481bf02b45"><td class="mdescLeft">&#160;</td><td class="mdescRight">nearestSurface: every cells (Triangles) near the camera (inside a bbox cube around the camera) will be put in this PolyData <br /></td></tr>
+<tr class="separator:a2f5d424df03075c9baf308481bf02b45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:abffa537421ddc44c251a0a0513437e8e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abffa537421ddc44c251a0a0513437e8e"></a>
+vtkSmartPointer&lt; vtkCamera &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#abffa537421ddc44c251a0a0513437e8e">Camera</a></td></tr>
+<tr class="memdesc:abffa537421ddc44c251a0a0513437e8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">camera: a vtkCamera for the scene <br /></td></tr>
+<tr class="separator:abffa537421ddc44c251a0a0513437e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa765b0a6afb8c8c8aa663fc2a57ba02b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa765b0a6afb8c8c8aa663fc2a57ba02b"></a>
+vtkSmartPointer&lt; vtkRenderWindowInteractor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#aa765b0a6afb8c8c8aa663fc2a57ba02b">Interactor</a></td></tr>
+<tr class="memdesc:aa765b0a6afb8c8c8aa663fc2a57ba02b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interactor: a vtkRenderWindowInteractor to interact with the RenderWindow of the 3D scene. <br /></td></tr>
+<tr class="separator:aa765b0a6afb8c8c8aa663fc2a57ba02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f6d486889ab60496ef956acf9541a42"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f6d486889ab60496ef956acf9541a42"></a>
+vtkSmartPointer&lt; vtkDecimatePro &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a4f6d486889ab60496ef956acf9541a42">Surface_col</a></td></tr>
+<tr class="memdesc:a4f6d486889ab60496ef956acf9541a42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surface_col: Decimate Object containing a PolyData of the surface for the collision. <br /></td></tr>
+<tr class="separator:a4f6d486889ab60496ef956acf9541a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a836a2f112a0353196f486d8b7256709c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a836a2f112a0353196f486d8b7256709c"></a>
+vtkSmartPointer&lt; vtkPolyData &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a836a2f112a0353196f486d8b7256709c">Surface</a></td></tr>
+<tr class="memdesc:a836a2f112a0353196f486d8b7256709c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surface: PolyData of the surface of interest. <br /></td></tr>
+<tr class="separator:a836a2f112a0353196f486d8b7256709c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38c9773d6313943b0e3aba513c88da70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38c9773d6313943b0e3aba513c88da70"></a>
+vtkSmartPointer&lt; vtkSphereSource &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a38c9773d6313943b0e3aba513c88da70">Sphere</a></td></tr>
+<tr class="memdesc:a38c9773d6313943b0e3aba513c88da70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sphere: will be used as a bbox for the camera (collision between camera and surface) <br /></td></tr>
+<tr class="separator:a38c9773d6313943b0e3aba513c88da70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad7085d5acf8cca1d1eb45418557a5c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad7085d5acf8cca1d1eb45418557a5c0"></a>
+vtkSmartPointer&lt; vtkIntersectionPolyDataFilter &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#aad7085d5acf8cca1d1eb45418557a5c0">intersectionPolyDataFilter</a></td></tr>
+<tr class="memdesc:aad7085d5acf8cca1d1eb45418557a5c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">intersectionPolyDataFilter: Intersection filter to know if there is an intersection between the bbox of the camera and the surface (collider) <br /></td></tr>
+<tr class="separator:aad7085d5acf8cca1d1eb45418557a5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36fc6a1088b4e4ea6915dcf923417669"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36fc6a1088b4e4ea6915dcf923417669"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a36fc6a1088b4e4ea6915dcf923417669">nb_inter</a></td></tr>
+<tr class="memdesc:a36fc6a1088b4e4ea6915dcf923417669"><td class="mdescLeft">&#160;</td><td class="mdescRight">nb_inter: Number of intersections between the bbxo of the camera and the surface <br /></td></tr>
+<tr class="separator:a36fc6a1088b4e4ea6915dcf923417669"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9d735541d14cab00c392e83733462c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc9d735541d14cab00c392e83733462c"></a>
+vtkSmartPointer&lt; vtkIdTypeArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#abc9d735541d14cab00c392e83733462c">cellIdArray</a></td></tr>
+<tr class="memdesc:abc9d735541d14cab00c392e83733462c"><td class="mdescLeft">&#160;</td><td class="mdescRight">cellIdArray: Create an array of Ids (needed to select the different cells, a list is not working) <br /></td></tr>
+<tr class="separator:abc9d735541d14cab00c392e83733462c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d64ceb793e702335c358534fd2c7b42"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d64ceb793e702335c358534fd2c7b42"></a>
+vtkSmartPointer&lt; vtkSelectionNode &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a0d64ceb793e702335c358534fd2c7b42">node</a></td></tr>
+<tr class="memdesc:a0d64ceb793e702335c358534fd2c7b42"><td class="mdescLeft">&#160;</td><td class="mdescRight">node: Create a selection node. This node will look for the cell with their Id <br /></td></tr>
+<tr class="separator:a0d64ceb793e702335c358534fd2c7b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2b10a65a72994e51ac2cc825c31eae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a2b10a65a72994e51ac2cc825c31eae"></a>
+vtkSmartPointer&lt; vtkSelection &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a0a2b10a65a72994e51ac2cc825c31eae">selection</a></td></tr>
+<tr class="memdesc:a0a2b10a65a72994e51ac2cc825c31eae"><td class="mdescLeft">&#160;</td><td class="mdescRight">selection: Create a selection object, pass the node to this object <br /></td></tr>
+<tr class="separator:a0a2b10a65a72994e51ac2cc825c31eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef199a496bfeea1c2ab3ad28513ca92a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef199a496bfeea1c2ab3ad28513ca92a"></a>
+vtkSmartPointer&lt; vtkExtractSelection &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#aef199a496bfeea1c2ab3ad28513ca92a">extractSelection</a></td></tr>
+<tr class="memdesc:aef199a496bfeea1c2ab3ad28513ca92a"><td class="mdescLeft">&#160;</td><td class="mdescRight">extractSelection: Create an extractor to get the different cells <br /></td></tr>
+<tr class="separator:aef199a496bfeea1c2ab3ad28513ca92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd4d6afc676b28254596e142afd66728"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd4d6afc676b28254596e142afd66728"></a>
+vtkSmartPointer&lt; vtkUnstructuredGrid &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#afd4d6afc676b28254596e142afd66728">selectedCells</a></td></tr>
+<tr class="memdesc:afd4d6afc676b28254596e142afd66728"><td class="mdescLeft">&#160;</td><td class="mdescRight">selectedCells: Create a grid that will contain all selected cells. It will have to create a PolyData from this gris <br /></td></tr>
+<tr class="separator:afd4d6afc676b28254596e142afd66728"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac52d4c6a33aa34c7bed63bf75ef5c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ac52d4c6a33aa34c7bed63bf75ef5c6"></a>
+vtkSmartPointer&lt; vtkGeometryFilter &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a0ac52d4c6a33aa34c7bed63bf75ef5c6">geometryFilter</a></td></tr>
+<tr class="memdesc:a0ac52d4c6a33aa34c7bed63bf75ef5c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">geometryFilter: Create a geometry filter to change the grid into a PolyData object <br /></td></tr>
+<tr class="separator:a0ac52d4c6a33aa34c7bed63bf75ef5c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="class_key_press_interactor_navigation_style.html" title="The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keybo...">KeyPressInteractorNavigationStyle</a> class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene) </p>
@@ -281,6 +348,30 @@ Static Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const vtkSmartPointer&lt; vtkPolyData &gt; &amp;&#160;</td>
           <td class="paramname"><em>surface</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set a particular iso-surface to interact with. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">surface</td><td>a particular vtkPolyData representing the surface </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a5873d911f16a39d8f8dfd7b29d2557d2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KeyPressInteractorNavigationStyle::SetSurfaceCollision </td>
+          <td>(</td>
+          <td class="paramtype">const vtkSmartPointer&lt; vtkDecimatePro &gt; &amp;&#160;</td>
+          <td class="paramname"><em>surface_col</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

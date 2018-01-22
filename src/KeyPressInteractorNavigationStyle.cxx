@@ -17,6 +17,12 @@ KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
 {
     this->Camera     = NULL;
     this->intersectionPolyDataFilter = vtkSmartPointer<vtkIntersectionPolyDataFilter>::New();
+    cellIdArray = vtkSmartPointer<vtkIdTypeArray>::New();
+    node = vtkSmartPointer<vtkSelectionNode>::New();
+    selection = vtkSmartPointer<vtkSelection>::New();
+    extractSelection = vtkSmartPointer<vtkExtractSelection>::New();
+    selectedCells = vtkSmartPointer<vtkUnstructuredGrid>::New();
+    geometryFilter = vtkSmartPointer<vtkGeometryFilter>::New();
     this->nb_inter = 0;
 }
 
@@ -54,8 +60,13 @@ void KeyPressInteractorNavigationStyle::SetInteractor(const vtkSmartPointer<vtkR
  * Set the iso-surface created with Marching cubes (useful for collision between the camera bbox and the surface)
  * Param: surface: a vtkPolyData
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPolyData>& surface){
+void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPolyData> &surface){
     this->Surface=surface;
+}
+
+void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkDecimatePro> &surface_col)
+{
+    this->Surface_col = surface_col;
 }
 
 
@@ -81,7 +92,7 @@ void KeyPressInteractorNavigationStyle::SetIntersectionPolyDataFilter()
     intersectionPolyDataFilter->SetInputData(1, Surface);
     // Update the filter
     intersectionPolyDataFilter->Update();
-    std::cout<<"Update surface for intersection"<<std::endl;
+    //std::cout<<"Update surface for intersection"<<std::endl;
 }
 
 
@@ -124,69 +135,182 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
     Camera->Azimuth(-1);
     }
 
-    // Handle z key: move forward
-    if(key == "z" || key=="Z")
+    // For each movement backward or upward
+    if(key == "z" || key=="Z" || key == "s" || key=="S")
     {
-        // Move forward
-        Camera->Dolly(5);
+        /******************************************************/
+        // This sample of code is in charge of create a surface from the cells (triangles) near the camera
+        // This way it will look for collision between the bbox of the camera and the surface only with these triangles that are near the camera
+        // and not all the triangles of the surface
+        // It is freely inspirated from this code : https://www.vtk.org/Wiki/VTK/Examples/Cxx/PolyData/ExtractSelectionCells
 
-        std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+        // Create a cell locator
+        vtkSmartPointer<vtkCellLocator> cellLocator = vtkSmartPointer<vtkCellLocator>::New();
 
-        // Set the bbox of the camera at the correct location
-        Sphere->SetCenter(Camera->GetPosition());
+        // Set the data as the surface
+        cellLocator->SetDataSet(Surface_col->GetOutput());
 
-        std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+        // Create the cell locator
+        cellLocator->BuildLocator();
 
-        // Update the IntersectionFilter with the new PolyData
-        intersectionPolyDataFilter->Update();
+        // Bounding box of the camera: cube where the camera is at the center
+        // This code will look for all cells inside this cube
+        double* bounds = new double[6];
+        bounds[0] = Camera->GetPosition()[0]-1.0;
+        bounds[1] = Camera->GetPosition()[0]+1.0;
+        bounds[2] = Camera->GetPosition()[1]-1.0;
+        bounds[3] = Camera->GetPosition()[1]+1.0;
+        bounds[4] = Camera->GetPosition()[2]-1.0;
+        bounds[5] = Camera->GetPosition()[2]+1.0;
 
-        // Get the number of intersections
-        nb_inter = intersectionPolyDataFilter->GetNumberOfIntersectionPoints();
-        std::cout<<"Inters: "<<nb_inter<<std::endl;
+        // Create a list of Ids
+        vtkIdList* cellIdList = vtkIdList::New();
 
-        // If there are some intersections
-        // Then move backward to get back to the old position
-        // This method is a work-in-progress: it would be better to test the interaction at the new position with another camera object
-        // and then move the real camera only if there are no intersection in the position
-        if(nb_inter >= 1)
+        // Find the cell of the surface inside the bbox of the camera
+        // This function will populate the cellIdList
+        cellLocator->FindCellsWithinBounds(bounds,cellIdList);
+
+        //std::cout<<"nb cell: "<<cellIdList->GetNumberOfIds()<<std::endl;
+
+        cellIdArray->SetNumberOfComponents(1);
+
+        // Put all Ids we found in the list inside this array
+        for(unsigned int i = 0; i < cellIdList->GetNumberOfIds(); i++)
         {
-            // Move backward
-            Camera->Dolly(0.2);
-            std::cout<<"don't move"<<std::endl;
+            cellIdArray->InsertNextValue(cellIdList->GetId(i));
         }
 
+        node->SetFieldType(vtkSelectionNode::CELL);
+        node->SetContentType(vtkSelectionNode::INDICES);
+        // Set the list of Ids to the node
+        node->SetSelectionList(cellIdArray);
 
-    }
+        selection->AddNode(node);
 
-    // Handle s key: move backward
-    if(key == "s")
-    {
-        // Move backward
-        Camera->Dolly(0.4);
+        // Set the input connection to the surface in question
+        extractSelection->SetInputConnection(0, Surface_col->GetOutputPort());
+        // The data are the selection of cells inside this surface
+        extractSelection->SetInputData(1, selection);
+        extractSelection->Update();
 
-        std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+        // Get all the cells that have been selected
+        selectedCells->ShallowCopy(extractSelection->GetOutput());
 
-        // Set the bbox of the camera at the correct location
-        Sphere->SetCenter(Camera->GetPosition());
+//        std::cout << "There are " << selectedCells->GetNumberOfPoints()
+//                  << " points in the selection." << std::endl;
+//        std::cout << "There are " << selectedCells->GetNumberOfCells()
+//                  << " cells in the selection." << std::endl;
 
-        std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+        if(selectedCells->GetNumberOfCells() >= 1)
+        {
+            // Set the grid as data
+            geometryFilter->SetInputData(selectedCells);
+            geometryFilter->Update();
+            // Get the PolyData created from the grid
+            nearestSurface = geometryFilter->GetOutput();
 
-        // Update the IntersectionFilter with the new PolyData
-        intersectionPolyDataFilter->Update();
+            // Set the surface for the collision as this new limited surface containing the nearest cells from the camera
+            this->SetSurface(nearestSurface);
+            // Update the InteractionFilter
+            this->SetIntersectionPolyDataFilter();
+        }
 
-        // Get the number of intersections
-        nb_inter = intersectionPolyDataFilter->GetNumberOfIntersectionPoints();
-        std::cout<<"Inters: "<<nb_inter<<std::endl;
-
-        // If there are some intersections
-        // Then move forward to get back to the old position
-        // This method is a work-in-progress: it would be better to test the interaction at the new position with another camera object
-        // and then move the real camera only if there are no intersection in the position
-        if(nb_inter >= 1)
+        // Handle z key: move forward
+        if(key == "z" || key=="Z")
         {
             // Move forward
-            Camera->Dolly(10);
-            std::cout<<"don't move"<<std::endl;
+            Camera->Dolly(5);
+            // Set the focal point of the camera
+            Camera->SetDistance(1);
+
+            std::cout<<"av norm"<<std::endl;
+
+            if(selectedCells->GetNumberOfCells() >= 1)
+            {
+                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+
+                // Set the bbox of the camera at the correct location
+                Sphere->SetCenter(Camera->GetPosition());
+
+                // Render everything
+                this->Interactor->GetRenderWindow()->Render();
+
+                //this->SetIntersectionPolyDataFilter();
+                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+
+                // Update the IntersectionFilter with the new PolyData
+                intersectionPolyDataFilter->Update();
+
+                // Get the number of intersections
+                nb_inter = intersectionPolyDataFilter->GetNumberOfIntersectionPoints();
+                std::cout<<"Inters: "<<nb_inter<<std::endl;
+
+                // If there are some intersections
+                // Then move backward to get back to the old position
+                // This method is a work-in-progress: it would be better to test the interaction at the new position with another camera object
+                // and then move the real camera only if there are no intersection in the position
+                if(nb_inter > 0)
+                {
+                    // Move backward
+                    Camera->Dolly(0.3);
+                    // Set the focal point of the camera
+                    Camera->SetDistance(1);
+                    // Render everything
+                    this->Interactor->GetRenderWindow()->Render();
+                    std::cout<<"recule"<<std::endl;
+                }
+            }
+        }
+
+        // Handle s key: move backward
+        if(key == "s" || key == "S")
+        {
+            // Move backward
+            Camera->Dolly(0.6);
+
+            // Set the focal point of the camera
+            Camera->SetDistance(1);
+
+            std::cout<<"rc norm"<<std::endl;
+
+            if(selectedCells->GetNumberOfCells() >= 1)
+            {
+
+                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+
+                // Set the bbox of the camera at the correct location
+                Sphere->SetCenter(Camera->GetPosition());
+
+                // Render everything
+                this->Interactor->GetRenderWindow()->Render();
+
+                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
+                this->SetIntersectionPolyDataFilter();
+                // Update the IntersectionFilter with the new PolyData
+                intersectionPolyDataFilter->Update();
+
+                // Get the number of intersections
+                nb_inter = intersectionPolyDataFilter->GetNumberOfIntersectionPoints();
+                std::cout<<"Inters: "<<nb_inter<<std::endl;
+
+                // If there are some intersections
+                // Then move forward to get back to the old position
+                // This method is a work-in-progress: it would be better to test the interaction at the new position with another camera object
+                // and then move the real camera only if there are no intersection in the position
+                if(nb_inter > 0)
+                {
+                    // Move forward
+                    Camera->Dolly(10);
+
+                    // Set the focal point of the camera
+                    Camera->SetDistance(1);
+
+                    // Render everything
+                    this->Interactor->GetRenderWindow()->Render();
+
+                    std::cout<<"avance"<<std::endl;
+                }
+            }
         }
     }
 

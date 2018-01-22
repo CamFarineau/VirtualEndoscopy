@@ -42,6 +42,15 @@
 #include "vtkIntersectionPolyDataFilter.h"
 #include "vtkCellLocator.h"
 
+#include "vtkSelection.h"
+#include "vtkSelectionNode.h"
+#include "vtkPolyData.h"
+#include "vtkSelection.h"
+#include "vtkExtractSelection.h"
+#include "vtkUnstructuredGrid.h"
+#include "vtkGeometryFilter.h"
+#include "vtkDecimatePro.h"
+
 /**
  * @brief The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene)
  */
@@ -87,7 +96,13 @@ public:
      * @brief Set a particular iso-surface to interact with
      * @param surface: a particular vtkPolyData representing the surface
      */
-    void SetSurface(const vtkSmartPointer<vtkPolyData>& surface);
+    void SetSurface(const vtkSmartPointer<vtkPolyData> &surface);
+
+    /**
+     * @brief Set a particular iso-surface to interact with
+     * @param surface: a particular vtkPolyData representing the surface
+     */
+    void SetSurfaceCollision(const vtkSmartPointer<vtkDecimatePro> &surface_col);
 
     /**
      * @brief Set a particular sphere representing the camera bounding box
@@ -105,6 +120,11 @@ public:
      */
     virtual void OnKeyPress();
 
+    /**
+     * @brief nearestSurface: every cells (Triangles) near the camera (inside a bbox cube around the camera) will be put in this PolyData
+     */
+    vtkSmartPointer<vtkPolyData> nearestSurface;
+
 private:
     /**
      * @brief camera: a vtkCamera for the scene
@@ -117,7 +137,12 @@ private:
     vtkSmartPointer<vtkRenderWindowInteractor> Interactor;
 
     /**
-     * @brief Surface: iso-surface created with marching cubes
+     * @brief Surface_col: Decimate Object containing a PolyData of the surface for the collision
+     */
+    vtkSmartPointer<vtkDecimatePro> Surface_col;
+
+    /**
+     * @brief Surface: PolyData of the surface of interest
      */
     vtkSmartPointer<vtkPolyData> Surface;
 
@@ -135,6 +160,36 @@ private:
      * @brief nb_inter: Number of intersections between the bbxo of the camera and the surface
      */
     int nb_inter;
+
+    /**
+     * @brief cellIdArray: Create an array of Ids (needed to select the different cells, a list is not working)
+     */
+    vtkSmartPointer<vtkIdTypeArray> cellIdArray;
+
+    /**
+     * @brief node: Create a selection node. This node will look for the cell with their Id
+     */
+    vtkSmartPointer<vtkSelectionNode> node;
+
+    /**
+     * @brief selection: Create a selection object, pass the node to this object
+     */
+    vtkSmartPointer<vtkSelection> selection;
+
+    /**
+     * @brief extractSelection: Create an extractor to get the different cells
+     */
+    vtkSmartPointer<vtkExtractSelection> extractSelection;
+
+    /**
+     * @brief selectedCells: Create a grid that will contain all selected cells. It will have to create a PolyData from this gris
+     */
+    vtkSmartPointer<vtkUnstructuredGrid> selectedCells;
+
+    /**
+     * @brief geometryFilter: Create a geometry filter to change the grid into a PolyData object
+     */
+    vtkSmartPointer<vtkGeometryFilter> geometryFilter;
 
 };
 
