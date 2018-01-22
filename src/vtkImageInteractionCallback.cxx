@@ -1,7 +1,10 @@
 #include "vtkImageInteractionCallback.h"
 
 
-
+/*------------------------------------------------------------------------*\
+ * vtkImageInteractionCallback::vtkImageInteractionCallback
+ * Constructor
+\*------------------------------------------------------------------------*/
 vtkImageInteractionCallback::vtkImageInteractionCallback()
 {
     this->Viewer     = NULL;
@@ -9,6 +12,11 @@ vtkImageInteractionCallback::vtkImageInteractionCallback()
     this->Annotation = NULL;
 }
 
+
+/*------------------------------------------------------------------------*\
+vtkImageInteractionCallback::~vtkImageInteractionCallback
+ * Destructor
+\*------------------------------------------------------------------------*/
 vtkImageInteractionCallback::~vtkImageInteractionCallback()
 {
     this->Viewer     = NULL;
@@ -16,23 +24,44 @@ vtkImageInteractionCallback::~vtkImageInteractionCallback()
     this->Annotation = NULL;
 }
 
+
+/*------------------------------------------------------------------------*\
+void vtkImageInteractionCallback::SetPicker
+ * Param: picker : user click
+\*------------------------------------------------------------------------*/
 void vtkImageInteractionCallback::SetPicker(vtkPropPicker *picker)
 {
     this->Picker = picker;
 }
 
+
+/*------------------------------------------------------------------------*\
+void vtkImageInteractionCallback::SetAnnotation
+ * Param: annotation : text on the reslice image
+\*------------------------------------------------------------------------*/
 void vtkImageInteractionCallback::SetAnnotation(vtkCornerAnnotation *annotation)
 {
     this->Annotation = annotation;
 }
 
+
+
+/*------------------------------------------------------------------------*\
+void vtkImageInteractionCallback::SetViewer
+ * Param: viewer : current image
+\*------------------------------------------------------------------------*/
 void vtkImageInteractionCallback::SetViewer(vtkResliceImageViewer *viewer)
 {
     this->Viewer = viewer;
 }
 
+
+/*------------------------------------------------------------------------*\
+void vtkImageInteractionCallback::Execute
+\*------------------------------------------------------------------------*/
 void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(event), void *)
 {
+    //Catch elements corresponding to the current viewer
     vtkRenderWindowInteractor *interactor = this->Viewer->GetRenderWindow()->GetInteractor();
     vtkRenderer* renderer = this->Viewer->GetRenderer();
     vtkImageActor* actor = this->Viewer->GetImageActor();
@@ -53,14 +82,21 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
     vtkAssemblyPath* path = this->Picker->GetPath();
     bool validPick = false;
 
+    // Verification that we pick something inside the slice and not outside
+    // Path exist
+
     if (path)
     {
+        // Create an iterator to get through list of node
         vtkCollectionSimpleIterator sit;
         path->InitTraversal(sit);
         vtkAssemblyNode *node;
+        // Go through all node
         for (int i = 0; i < path->GetNumberOfItems() && !validPick; ++i)
         {
             node = path->GetNextNode(sit);
+            // If the actor is the same
+            // Then this is a valid pick (this is the actor from the slice)
             if (actor == vtkImageActor::SafeDownCast(node->GetViewProp()))
             {
                 validPick = true;
@@ -68,6 +104,8 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
         }
     }
 
+    // If this is not a valid pick (outside the slice)
+    // Then prompt "Off Image" and return
     if (!validPick)
     {
         this->Annotation->SetText(0, "Off Image");
@@ -84,6 +122,7 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
 
     int image_coordinate[3];
 
+    // Get the orientation of the slice that the user picked from
     int axis = this->Viewer->GetSliceOrientation();
     switch (axis)
     {
@@ -104,6 +143,7 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
         break;
     }
 
+    //Text displayed on the window
     std::string message = "Location: ( ";
     message += vtkVariant(image_coordinate[0]).ToString();
     message += ", ";
@@ -123,6 +163,10 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
     }
 
     this->Annotation->SetText( 0, message.c_str() );
+
+    //Render the interactor
     interactor->Render();
+
+    //Event binding
     style->OnMouseMove();
 }

@@ -73,7 +73,7 @@ void KeyPressInteractorNavigationStyle::SetSphere(const vtkSmartPointer<vtkSpher
  * KeyPressInteractorNavigationStyle::SetInteractionPolyDataFilter()
  * Set the 2 PolyData that will be used by the InteractionFilter (the bbox of the camera and the surface of the object of interest)
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetInteractionPolyDataFilter()
+void KeyPressInteractorNavigationStyle::SetIntersectionPolyDataFilter()
 {
     // Set the first PolyData as the bbox of the camera (PolyData of the sphere)
     intersectionPolyDataFilter->SetInputData(0, Sphere->GetOutput());
