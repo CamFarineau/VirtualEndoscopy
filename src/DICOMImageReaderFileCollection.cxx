@@ -16,6 +16,10 @@
 // .SECTION Description
 //
 
+#include <vtkAutoInit.h>
+VTK_MODULE_INIT(vtkRenderingOpenGL2)
+#include "vtkSMPTools.h"
+
 #include "KeyPressInteractorStyle.h"
 #include "KeyPressInteractorNavigationStyle.h"
 #include "vtkImageInteractionCallback.h"
@@ -29,7 +33,7 @@
 #include "vtkRenderer.h"
 #include "vtkCamera.h"
 #include "vtkRenderWindowInteractor.h"
-#include "vtkTestUtilities.h"
+//#include "vtkTestUtilities.h"
 #include <vtkSmartPointer.h>
 #include <vtkMarchingCubes.h>
 #include <vtkVoxelModeller.h>
@@ -37,14 +41,15 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkRenderWindow.h>
 #include "vtkGPUVolumeRayCastMapper.h"
-#include "vtkTestErrorObserver.h"
+//#include "vtkTestErrorObserver.h"
 #include "vtkColorTransferFunction.h"
 #include "vtkPiecewiseFunction.h"
 #include "vtkVolume.h"
 #include "vtkVolumeProperty.h"
 #include "vtkInteractorStyleTrackballCamera.h"
 #include "vtkAxesActor.h"
-
+#include "vtkStreamingDemandDrivenPipeline.h"
+#include <vtksys/Process.h>
 
 #include <vtkVersion.h>
 #include <vtkAssemblyPath.h>
@@ -91,6 +96,8 @@
 
 #include <vtkActor.h>
 #include <vtkGenericOpenGLRenderWindow.h>
+//#include <vtkSmartVolumeMapper.h>
+
 
 #include <QVTKOpenGLWidget.h>
 #include <QSurfaceFormat>
@@ -103,6 +110,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QWidget>
 #include "QVTKOpenGLWidget.h"
+
+#include "vtkOutlineFilter.h"
+
 
 
 // For compatibility with new VTK generic data arrays
@@ -165,6 +175,9 @@ public:
 
 int main(int argc, char *argv[])
 {
+
+
+
 
   if ( argc <= 1 )
   {
@@ -286,6 +299,8 @@ int main(int argc, char *argv[])
 
       style[i]->AddObserver(vtkCommand::MouseMoveEvent, callback[i]);
 
+      //style[i]->RemoveObserver(vtkCommand::KeyPressEvent);
+     // style[i]->RemoveObserver(vtkCommand::CharEvent);
 
     imageViewer[i]->SetSliceOrientation(i);
     imageViewer[i]->SetColorLevel(-100);
@@ -299,6 +314,7 @@ int main(int argc, char *argv[])
        camera[i]->Roll(rotation);
     }
   }
+
 
   renderWindowInteractor->Initialize();
   renderWindowInteractor->Start();
@@ -316,14 +332,11 @@ int main(int argc, char *argv[])
   volume->DeepCopy(DICOMReader->GetOutput());
 
   double middlePoint[3];
-
-
   surface->SetInputData(volume);
   surface->ComputeNormalsOn();
   surface->ComputeGradientsOn();
   surface->ComputeScalarsOn();
   surface->SetValue(0,isoValue);
-  //surface->GenerateValues(5,-120,0);
 
     surface->Update();
     std::cout << "Before Decimation." << std::endl;
@@ -361,9 +374,39 @@ int main(int argc, char *argv[])
   view4->SetRenderWindow(surfaceRenderWindow);
   vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = view4->GetInteractor();
   surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
+
+
+
+ double scalarRange[2];
+/* vtkNew<vtkGPUVolumeRayCastMapper> volumeMapper;
+ volumeMapper->SetInputConnection(surface->GetOutputPort());
+ volumeMapper->SetSampleDistance(0.01);*/
+
+
+ // Add outline filter
+/* vtkNew<vtkOutlineFilter> outlineFilter;
+ outlineFilter->SetInputConnection(reader->GetOutputPort());*/
+
+
+  /*volumeMapper->GetInput()->GetScalarRange(scalarRange);
+  volumeMapper->SetBlendModeToComposite();
+  volumeMapper->SetAutoAdjustSampleDistances(1);*/
+
+  /*// Force a number of partition blocks
+  vtkOpenGLGPUVolumeRayCastMapper* mappergl =
+  vtkOpenGLGPUVolumeRayCastMapper::SafeDownCast(mapper.GetPointer());
+  mappergl->SetPartitions(2, 1, 2);*/
+
+  /*vtkNew<vtkOutlineFilter> outlineFilter;
+  outlineFilter->SetInputConnection(surface->GetOutputPort());*/
+
+
+  //old version
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInputData(surface->GetOutput());
   mapper->ScalarVisibilityOff();
+
+ /* mapper->SetInputConnection(outlineFilter->GetOutputPort());*/
 
   double bounds[6];
   mapper->GetBounds(bounds);
@@ -379,7 +422,6 @@ int main(int argc, char *argv[])
   aCamera->SetFocalPoint(middlePoint[0], middlePoint[1],middlePoint[2]);
   aCamera->SetViewUp(0,0,-1);
 
-
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
   actor->GetProperty()->SetDiffuseColor(1, .49, .25);
@@ -387,12 +429,13 @@ int main(int argc, char *argv[])
   actor->GetProperty()->SetSpecularPower(20);
   actor->GetProperty()->BackfaceCullingOn();
 
+ /* volumeMapper->GetInput()->GetScalarRange(scalarRange);
+  volumeMapper->SetBlendModeToComposite();
+  volumeMapper->SetAutoAdjustSampleDistances(1);*/
 
   vtkSmartPointer<vtkCameraActor> cameraActor = vtkSmartPointer<vtkCameraActor>::New();
   cameraActor->SetCamera(aCamera);
   cameraActor->GetProperty()->SetColor(0, 0, 0);
-
-
 
 
   /*************************************************/
@@ -425,6 +468,7 @@ int main(int argc, char *argv[])
   /*********************************************/
 
   deci->Update();
+  //surfaceRenderer->AddViewProp(volume2);
   surfaceRenderer->AddActor(actor);
   surfaceRenderer->ResetCameraClippingRange();
   // Finally, add the volume to the renderer
@@ -445,6 +489,7 @@ int main(int argc, char *argv[])
  for(int j=0;j<3;j++){
     style[j]->SetCamera(aCamera);
     style[j]->SetInteractor(surfaceInteractor);
+    style[j]->SetViewerNav(surfaceInteractor->GetRenderWindow());
   }
 
   vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
@@ -455,10 +500,8 @@ int main(int argc, char *argv[])
   widget->SetInteractor( surfaceInteractor );
   widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
   widget->SetEnabled( 1 );
-  widget->InteractiveOn();
+//  widget->InteractiveOn();
 
-
-  std::cout<<"Cam deb: X: "<<aCamera->GetPosition()[0]<<" Y: "<<aCamera->GetPosition()[1]<<" Z: "<<aCamera->GetPosition()[2]<<std::endl;
 
   surfaceInteractor->Start();
   QtVTKRenderWindows->show();

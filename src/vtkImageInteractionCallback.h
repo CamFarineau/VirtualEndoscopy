@@ -24,7 +24,7 @@
 #include "vtkRenderer.h"
 #include "vtkCamera.h"
 #include "vtkRenderWindowInteractor.h"
-#include "vtkTestUtilities.h"
+//#include "vtkTestUtilities.h"
 #include <vtkActor.h>
 #include <vtkRenderWindow.h>
 #include "vtkResliceImageViewer.h"

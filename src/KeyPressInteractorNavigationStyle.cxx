@@ -60,12 +60,12 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 
   if(key == "Left")
     {
-    Camera->Yaw(1);
+    Camera->Azimuth(1);
     }
 
   if(key == "Right")
     {
-    Camera->Yaw(-1);
+    Camera->Azimuth(-1);
     }
 
   if(key == "z")
@@ -116,9 +116,5 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 
 
   this->Interactor->GetRenderWindow()->Render();
-
-
-
-
-  vtkInteractorStyleTrackballCamera::OnKeyPress();
+ // vtkInteractorStyleTrackballCamera::OnKeyPress();
 }

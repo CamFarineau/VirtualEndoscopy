@@ -26,7 +26,7 @@
 #include "vtkResliceImageViewer.h"
 #include "vtkCamera.h"
 #include "vtkRenderWindowInteractor.h"
-#include "vtkTestUtilities.h"
+//#include "vtkTestUtilities.h"
 #include <vtkActor.h>
 #include <vtkRenderWindow.h>
 #include "vtkSelectionNode.h"
@@ -50,8 +50,7 @@ class KeyPressInteractorStyle : public vtkInteractorStyleImage
     static KeyPressInteractorStyle* New();
 
     void SetCamera(const vtkSmartPointer<vtkCamera>& camera);
-
-
+    void SetViewerNav(const vtkSmartPointer<vtkRenderWindow> &viewer);
     void SetPicker(vtkPropPicker *picker);
     void SetAnnotation(vtkCornerAnnotation *annotation);
     void SetViewer(vtkResliceImageViewer *viewer);
@@ -59,17 +58,22 @@ class KeyPressInteractorStyle : public vtkInteractorStyleImage
     void SetSurface(const vtkSmartPointer<vtkDecimatePro>& surface);
     void SetStyleNav(const vtkSmartPointer<KeyPressInteractorNavigationStyle>& styleNav);
 
-    virtual void OnKeyPress();
+    virtual void OnChar();
     vtkSmartPointer<vtkPolyData> closedSurface;
     vtkSmartPointer<KeyPressInteractorNavigationStyle> StyleNav;
 
+
 private:
-  vtkResliceImageViewer*    Viewer;      // Pointer to the viewer
+  vtkResliceImageViewer*    Viewer;  // Pointer to the viewer
   vtkPropPicker*        Picker;      // Pointer to the picker
   vtkCornerAnnotation*  Annotation;  // Pointer to the annotation
+
   vtkSmartPointer<vtkCamera> Camera; // Pointer to the camera
   vtkSmartPointer<vtkRenderWindowInteractor> Interactor; // Pointer to the interactor
   vtkSmartPointer<vtkDecimatePro> Surface;
+  vtkSmartPointer<vtkRenderWindow> ViewerNav; // Pointer to the navigation interactor
+
+
 };
 
 

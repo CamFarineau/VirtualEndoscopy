@@ -55,17 +55,26 @@ void KeyPressInteractorStyle::SetStyleNav(const vtkSmartPointer<KeyPressInteract
     StyleNav=styleNav;
 }
 
-void KeyPressInteractorStyle::OnKeyPress()
+void KeyPressInteractorStyle::SetViewerNav(const vtkSmartPointer<vtkRenderWindow>& viewer)
+{
+    this->ViewerNav = viewer;
+}
+
+
+void KeyPressInteractorStyle::OnChar()
 {
     // Get the keypress
     vtkRenderWindowInteractor *rwi = this->Viewer->GetRenderWindow()->GetInteractor();
+
     std::cout<<"KeyPressInteractorStyle"<<std::endl;
     std::string key = rwi->GetKeySym();
-    std::cout<<"key"<<key<<std::endl;
+    std::cout<<"key "<<key<<std::endl;
+
 
     // Output the key that was pressed
     if(key == "P" || key == "p")
     {
+        //rwi->EnableRenderOn();
 
         std::cout<<"level: "<<Viewer->GetColorLevel()<<" ,window: "<<Viewer->GetColorWindow()<<std::endl;
         coordonnees[0] = 0;
@@ -143,6 +152,10 @@ void KeyPressInteractorStyle::OnKeyPress()
             break;
         }
         Camera->SetPosition(coordonnees[0],coordonnees[1],coordonnees[2]);
+        double dis[2]={0.5,1000.0};
+        Camera->SetClippingRange(dis);
+        ViewerNav->Render();
+
         //surfaceRenderer->ResetCameraClippingRange();
         std::cout<<"coord: "<<coordonnees[0]<<" , "<<coordonnees[1]<<" , "<<coordonnees[2]<<std::endl;
 
@@ -213,6 +226,10 @@ void KeyPressInteractorStyle::OnKeyPress()
 
         //interactor->Render();
     }
-    vtkInteractorStyleImage::OnKeyPress();
+    //rwi->EnableRenderOff();
+
+
+
+    //KeyPressInteractorStyle::OnKeyPress();
 
 }
