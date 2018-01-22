@@ -80,6 +80,12 @@
 #include "vtkSliderWidget.h"
 #include <vtkObjectFactory.h>
 #include "vtkSphereSource.h"
+#include "vtkSelectionNode.h"
+#include "vtkExtractSelection.h"
+#include "vtkSelection.h"
+#include "vtkUnstructuredGrid.h"
+#include "vtkGeometryFilter.h"
+#include "vtkFileOutputWindow.h"
 
 #include <QApplication>
 
@@ -166,12 +172,19 @@ int main(int argc, char *argv[])
     return 1;
   }
 
+  vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =  vtkSmartPointer<vtkFileOutputWindow>::New();
+    fileOutputWindow->SetFileName( "output_errors.txt" );
+
+    // Note that the SetInstance function is a static member of vtkOutputWindow.
+    vtkOutputWindow::SetInstance(fileOutputWindow);
+
   std::string directoryName = argv[1];
   vtkSmartPointer<vtkDICOMImageReader> DICOMReader = vtkSmartPointer<vtkDICOMImageReader>::New();
   // Read the input files
   DICOMReader->SetDirectoryName(directoryName.c_str());
   cout << "Directory name: " << DICOMReader->GetDirectoryName() << endl;
   DICOMReader->Update();
+  std::cout<<"Extent: "<<DICOMReader->GetDataExtent()[0]<<" , "<<DICOMReader->GetDataExtent()[1]<<" , "<<DICOMReader->GetDataExtent()[2]<<" , "<<DICOMReader->GetDataExtent()[3]<<" , "<<DICOMReader->GetDataExtent()[4]<<" , "<<DICOMReader->GetDataExtent()[5]<<std::endl;
 
 
     QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
@@ -302,7 +315,6 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
   volume->DeepCopy(DICOMReader->GetOutput());
 
-
   double middlePoint[3];
 
 
@@ -320,8 +332,8 @@ int main(int argc, char *argv[])
 
      vtkSmartPointer<vtkDecimatePro> deci = vtkSmartPointer<vtkDecimatePro>::New();
      deci->SetInputConnection(surface->GetOutputPort());
-     deci->SetTargetReduction(0.95);
-     deci->SetAbsoluteError(0.05);
+     deci->SetTargetReduction(0.9);
+     deci->SetAbsoluteError(0.01);
      deci->SetFeatureAngle(30);
      deci->SetErrorIsAbsolute(1);
      deci->AccumulateErrorOn();
@@ -334,9 +346,11 @@ int main(int argc, char *argv[])
      std::cout << "There are: " << NumberofTriangles(deci->GetOutput())
                << " triangles." << std::endl;
 
+     /************************************/
 
+     /***************************************/
   vtkSmartPointer<vtkStripper> surfaceStripper = vtkSmartPointer<vtkStripper>::New();
-  surfaceStripper->SetInputConnection(deci->GetOutputPort());
+  surfaceStripper->SetInputData(surface->GetOutput());
 
   vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
   surfaceRenderer->SetBackground(.1, .2, .3);
@@ -348,7 +362,7 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkRenderWindowInteractor> surfaceInteractor = view4->GetInteractor();
   surfaceInteractor->SetRenderWindow(surfaceRenderWindow);
   vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputConnection(surfaceStripper->GetOutputPort());
+  mapper->SetInputData(surface->GetOutput());
   mapper->ScalarVisibilityOff();
 
   double bounds[6];
@@ -369,10 +383,10 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
   actor->GetProperty()->SetDiffuseColor(1, .49, .25);
-  actor->GetProperty()->SetSpecular(.3);
+  actor->GetProperty()->SetSpecular(.45);
   actor->GetProperty()->SetSpecularPower(20);
+  actor->GetProperty()->BackfaceCullingOn();
 
-  //actor->GetProperty()->BackfaceCullingOn();
 
   vtkSmartPointer<vtkCameraActor> cameraActor = vtkSmartPointer<vtkCameraActor>::New();
   cameraActor->SetCamera(aCamera);
@@ -424,6 +438,9 @@ int main(int argc, char *argv[])
   styleNav->SetSphere(source);
   styleNav->SetInteractionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
+
+  style[0]->SetSurface(deci);
+  style[0]->SetStyleNav(styleNav);
 
  for(int j=0;j<3;j++){
     style[j]->SetCamera(aCamera);

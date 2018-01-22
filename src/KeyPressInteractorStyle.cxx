@@ -47,6 +47,14 @@ void KeyPressInteractorStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindo
     this->Interactor=Interactor;
 }
 
+void KeyPressInteractorStyle::SetSurface(const vtkSmartPointer<vtkDecimatePro> &surface){
+    Surface=surface;
+}
+
+void KeyPressInteractorStyle::SetStyleNav(const vtkSmartPointer<KeyPressInteractorNavigationStyle>& styleNav){
+    StyleNav=styleNav;
+}
+
 void KeyPressInteractorStyle::OnKeyPress()
 {
     // Get the keypress
@@ -136,6 +144,70 @@ void KeyPressInteractorStyle::OnKeyPress()
         }
         Camera->SetPosition(coordonnees[0],coordonnees[1],coordonnees[2]);
         //surfaceRenderer->ResetCameraClippingRange();
+        std::cout<<"coord: "<<coordonnees[0]<<" , "<<coordonnees[1]<<" , "<<coordonnees[2]<<std::endl;
+
+
+        vtkSmartPointer<vtkCellLocator> cellLocator = vtkSmartPointer<vtkCellLocator>::New();
+          cellLocator->SetDataSet(Surface->GetOutput());
+          cellLocator->BuildLocator();
+          double* bounds = new double[6];
+          bounds[0] = coordonnees[0]-20.0;
+          bounds[1] = coordonnees[0]+20.0;
+          bounds[2] = coordonnees[1]-20.0;
+          bounds[3] = coordonnees[1]+20.0;
+          bounds[4] = coordonnees[2]-20.0;
+          bounds[5] = coordonnees[2]+20.0;
+
+          vtkIdList* cellId = vtkIdList::New(); //the cell id of the cell containing the closest point will be returned here
+          cellLocator->FindCellsWithinBounds(bounds,cellId);
+          std::cout<<"nb cell: "<<cellId->GetNumberOfIds()<<std::endl;
+
+        vtkSmartPointer<vtkIdTypeArray> ids =
+            vtkSmartPointer<vtkIdTypeArray>::New();
+        ids->SetNumberOfComponents(1);
+
+        // Specify that we want to extract cells 10 through 19
+        for(unsigned int i = 0; i < cellId->GetNumberOfIds(); i++)
+          {
+          ids->InsertNextValue(cellId->GetId(i));
+          }
+
+        vtkSmartPointer<vtkSelectionNode> selectionNode =
+          vtkSmartPointer<vtkSelectionNode>::New();
+        selectionNode->SetFieldType(vtkSelectionNode::CELL);
+        selectionNode->SetContentType(vtkSelectionNode::INDICES);
+        selectionNode->SetSelectionList(ids);
+
+
+        vtkSmartPointer<vtkSelection> selection =
+          vtkSmartPointer<vtkSelection>::New();
+        selection->AddNode(selectionNode);
+
+        vtkSmartPointer<vtkExtractSelection> extractSelection =
+          vtkSmartPointer<vtkExtractSelection>::New();
+        extractSelection->SetInputConnection(0, Surface->GetOutputPort());
+
+        extractSelection->SetInputData(1, selection);
+        extractSelection->Update();
+
+        // In selection
+        vtkSmartPointer<vtkUnstructuredGrid> selected =
+          vtkSmartPointer<vtkUnstructuredGrid>::New();
+        selected->ShallowCopy(extractSelection->GetOutput());
+
+        std::cout << "There are " << selected->GetNumberOfPoints()
+                  << " points in the selection." << std::endl;
+        std::cout << "There are " << selected->GetNumberOfCells()
+                  << " cells in the selection." << std::endl;
+
+        vtkSmartPointer<vtkGeometryFilter> geometryFilter =
+            vtkSmartPointer<vtkGeometryFilter>::New();
+         geometryFilter->SetInputData(selected);
+         geometryFilter->Update();
+         closedSurface = geometryFilter->GetOutput();
+
+        StyleNav->SetSurface(closedSurface);
+        StyleNav->SetInteractionPolyDataFilter();
 
         this->Interactor->GetRenderWindow()->Render();
 
