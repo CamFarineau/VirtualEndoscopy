@@ -480,7 +480,7 @@ int main(int argc, char *argv[])
   styleNav->SetInteractor(view4->GetInteractor());
   styleNav->SetSurface(surface->GetOutput());
   styleNav->SetSphere(source);
-  styleNav->SetInteractionPolyDataFilter();
+  styleNav->SetIntersectionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
 
   style[0]->SetSurface(deci);

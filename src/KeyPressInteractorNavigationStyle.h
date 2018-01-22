@@ -34,7 +34,6 @@
 #include "vtkResliceImageViewer.h"
 #include "vtkCamera.h"
 #include "vtkRenderWindowInteractor.h"
-//#include "vtkTestUtilities.h"
 #include <vtkActor.h>
 #include <vtkRenderWindow.h>
 #include "vtkPolyData.h"
@@ -44,7 +43,7 @@
 #include "vtkCellLocator.h"
 
 /**
- * @brief The KeyPressInteractorNavigationStyle class: class use to interact with the 3D Viewer with the keyboard (move the camera in the scene)
+ * @brief The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene)
  */
 class KeyPressInteractorNavigationStyle : public vtkInteractorStyleTrackballCamera
 {
@@ -99,7 +98,7 @@ public:
     /**
      * @brief Set the 2 vtkPolyData for the Interaction Filter (bbox of the camera and the surface / object)
      */
-    void SetInteractionPolyDataFilter();
+    void SetIntersectionPolyDataFilter();
 
     /**
      * @brief Event when a key is pressed
