@@ -64,7 +64,7 @@ void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPoly
     this->Surface=surface;
 }
 
-void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkDecimatePro> &surface_col)
+void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col)
 {
     this->Surface_col = surface_col;
 }

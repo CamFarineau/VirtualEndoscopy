@@ -10,11 +10,11 @@ var searchData=
   ['setsphere',['SetSphere',['../class_key_press_interactor_navigation_style.html#ace8105bf81e1a9dcd052d54df8ff1687',1,'KeyPressInteractorNavigationStyle']]],
   ['setstylenav',['SetStyleNav',['../class_key_press_interactor_style.html#af6cc9ef43fcb3c48090483e3e6b45302',1,'KeyPressInteractorStyle']]],
   ['setsurface',['SetSurface',['../class_key_press_interactor_navigation_style.html#a44ade33ec3e126a412312252af260fbb',1,'KeyPressInteractorNavigationStyle']]],
-  ['setsurfacecollision',['SetSurfaceCollision',['../class_key_press_interactor_navigation_style.html#a5873d911f16a39d8f8dfd7b29d2557d2',1,'KeyPressInteractorNavigationStyle']]],
+  ['setsurfacecollision',['SetSurfaceCollision',['../class_key_press_interactor_navigation_style.html#addd21c41c92a7e5b2d258aaa4fef0c7f',1,'KeyPressInteractorNavigationStyle']]],
   ['setviewer',['SetViewer',['../class_key_press_interactor_style.html#a1e378c5d67cd1cf968d5f69aed649cf1',1,'KeyPressInteractorStyle::SetViewer()'],['../classvtk_image_interaction_callback.html#ae97ed60cd60d012890e7eabeb698acf8',1,'vtkImageInteractionCallback::SetViewer()']]],
   ['setviewernav',['SetViewerNav',['../class_key_press_interactor_style.html#a92a110e34135cd62e79aa57cc006b4ec',1,'KeyPressInteractorStyle']]],
   ['sphere',['Sphere',['../class_key_press_interactor_navigation_style.html#a38c9773d6313943b0e3aba513c88da70',1,'KeyPressInteractorNavigationStyle']]],
   ['stylenav',['StyleNav',['../class_key_press_interactor_style.html#adcfb6cd4a1726bce76412107b0b9113f',1,'KeyPressInteractorStyle']]],
   ['surface',['Surface',['../class_key_press_interactor_navigation_style.html#a836a2f112a0353196f486d8b7256709c',1,'KeyPressInteractorNavigationStyle']]],
-  ['surface_5fcol',['Surface_col',['../class_key_press_interactor_navigation_style.html#a4f6d486889ab60496ef956acf9541a42',1,'KeyPressInteractorNavigationStyle']]]
+  ['surface_5fcol',['Surface_col',['../class_key_press_interactor_navigation_style.html#aa47969e288be3b603275c5ed7a453e01',1,'KeyPressInteractorNavigationStyle']]]
 ];
