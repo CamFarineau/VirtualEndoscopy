@@ -18,7 +18,6 @@ KeyPressInteractorStyle::KeyPressInteractorStyle()
 {
     this->Viewer     = NULL;
     this->Picker     = NULL;
-    this->Annotation = NULL;
     this->Camera     = NULL;
     this->Interactor = NULL;
     coordonnees[0] = 0;
@@ -34,7 +33,6 @@ KeyPressInteractorStyle::~KeyPressInteractorStyle()
 {
     this->Viewer     = NULL;
     this->Picker     = NULL;
-    this->Annotation = NULL;
     this->Camera     = NULL;
     this->Interactor = NULL;
 }
@@ -47,16 +45,6 @@ KeyPressInteractorStyle::~KeyPressInteractorStyle()
 void KeyPressInteractorStyle::SetPicker(vtkPropPicker *picker)
 {
     this->Picker = picker;
-}
-
-/*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetAnnotation
- * Set the correct corner annotation
- * Param: annotation
-\*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetAnnotation(vtkCornerAnnotation *annotation)
-{
-    this->Annotation = annotation;
 }
 
 /*------------------------------------------------------------------------*\
@@ -184,7 +172,6 @@ void KeyPressInteractorStyle::OnChar()
         // Then prompt "Off Image" and return
         if (!validPick)
         {
-            this->Annotation->SetText(0, "Off Image");
             interactor->Render();
             // Pass the event further on
             style->OnMouseMove();
@@ -192,8 +179,8 @@ void KeyPressInteractorStyle::OnChar()
         }
 
         // Get the coordinates of the pick inside the slices
-        double pos[3];
-        this->Picker->GetPickPosition(pos);
+        double position[3];
+        this->Picker->GetPickPosition(position);
 
         // Get the orientation of the slice that the user picked from
         int orientation = this->Viewer->GetSliceOrientation();
@@ -201,19 +188,19 @@ void KeyPressInteractorStyle::OnChar()
         switch (orientation)
         {
         case vtkImageViewer2::SLICE_ORIENTATION_XY:
-            coordonnees[0] = vtkMath::Round(pos[0]);
-            coordonnees[1] = vtkMath::Round(pos[1]);
+            coordonnees[0] = vtkMath::Round(position[0]);
+            coordonnees[1] = vtkMath::Round(position[1]);
             coordonnees[2] = this->Viewer->GetSlice();
             break;
         case vtkImageViewer2::SLICE_ORIENTATION_XZ:
-            coordonnees[0] = vtkMath::Round(pos[0]);
+            coordonnees[0] = vtkMath::Round(position[0]);
             coordonnees[1] = this->Viewer->GetSlice();
-            coordonnees[2] = vtkMath::Round(pos[2]);
+            coordonnees[2] = vtkMath::Round(position[2]);
             break;
         case vtkImageViewer2::SLICE_ORIENTATION_YZ:
             coordonnees[0] = this->Viewer->GetSlice();
-            coordonnees[1] = vtkMath::Round(pos[1]);
-            coordonnees[2] = vtkMath::Round(pos[2]);
+            coordonnees[1] = vtkMath::Round(position[1]);
+            coordonnees[2] = vtkMath::Round(position[2]);
             break;
         default:;
         }

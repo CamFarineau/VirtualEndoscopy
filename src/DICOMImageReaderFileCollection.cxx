@@ -291,7 +291,6 @@ int main(int argc, char *argv[])
 
       style[i] = vtkSmartPointer<KeyPressInteractorStyle>::New();
       style[i]->SetViewer(imageViewer[i]);
-      style[i]->SetAnnotation(cornerAnnotation[i]);
       style[i]->SetPicker(propPicker[i]);
 
       if(i==0)
@@ -322,6 +321,7 @@ int main(int argc, char *argv[])
 
   renderWindowInteractor->Initialize();
   renderWindowInteractor->Start();
+
 
 
   //Marching Cubes

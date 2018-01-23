@@ -1,9 +1,5 @@
 var searchData=
 [
-<<<<<<< HEAD
-  ['nearestsurface',['nearestSurface',['../class_key_press_interactor_style.html#a92ba7ab7897db2235995598f12e4a407',1,'KeyPressInteractorStyle']]],
-  ['new',['New',['../class_key_press_interactor_navigation_style.html#a92b934a4196498c303029fb62eb90f6a',1,'KeyPressInteractorNavigationStyle::New()'],['../class_key_press_interactor_style.html#a8cb6dacf1ba1f82af6f4823d2eb28cd8',1,'KeyPressInteractorStyle::New()']]]
-=======
+  ['execute',['Execute',['../classvtk_image_interaction_callback.html#ae2b150bf3b2b14ded2daf29ee11c200b',1,'vtkImageInteractionCallback']]],
   ['extractselection',['extractSelection',['../class_key_press_interactor_navigation_style.html#aef199a496bfeea1c2ab3ad28513ca92a',1,'KeyPressInteractorNavigationStyle']]]
->>>>>>> master
 ];

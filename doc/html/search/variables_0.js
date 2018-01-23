@@ -1,8 +1,4 @@
 var searchData=
 [
-<<<<<<< HEAD
-  ['coordonnees',['coordonnees',['../class_key_press_interactor_style.html#a9eff3a4d3a7cc145a6bebec25a3e2a5e',1,'KeyPressInteractorStyle']]]
-=======
-  ['annotation',['Annotation',['../class_key_press_interactor_style.html#a6c565438f30d58d8d1bce7d67ac6a5ea',1,'KeyPressInteractorStyle']]]
->>>>>>> master
+  ['annotation',['Annotation',['../classvtk_image_interaction_callback.html#acbc427b0c326c85794f58c1eb3dfa63a',1,'vtkImageInteractionCallback']]]
 ];

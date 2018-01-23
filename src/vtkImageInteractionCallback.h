@@ -114,9 +114,20 @@ public:
   virtual void Execute(vtkObject *, unsigned long vtkNotUsed(event), void *);
 
 private:
-  vtkResliceImageViewer*      Viewer;      // Pointer to the viewer
-  vtkPropPicker*        Picker;      // Pointer to the picker
-  vtkCornerAnnotation*  Annotation;  // Pointer to the annotation
+  /**
+   * @brief Viewer: the ResliceImageViewer associated with this InteractorStyle
+   */
+  vtkResliceImageViewer*      Viewer;
+
+  /**
+   * @brief Picker: the Picker associated with this InteractorStyle
+   */
+  vtkPropPicker*        Picker;
+
+  /**
+   * @brief Annotation: the Corner Annotation associated with this InteractorStyle
+   */
+  vtkCornerAnnotation*  Annotation;
 };
 
 

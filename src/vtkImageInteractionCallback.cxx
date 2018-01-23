@@ -77,6 +77,9 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
             interactor->GetEventPosition()[1],
             0.0, renderer);
 
+    // Verification that we pick something inside the slice and not outside
+    // This sample of code comes from this source code: https://www.vtk.org/Wiki/VTK/Examples/Cxx/Images/PickPixel2
+
     // There could be other props assigned to this picker, so
     // make sure we picked the image actor
     vtkAssemblyPath* path = this->Picker->GetPath();
@@ -115,53 +118,54 @@ void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(
         return;
     }
 
-    // Get the world coordinates of the pick
-    double pos[3];
-    this->Picker->GetPickPosition(pos);
+    int coordinate[3];
 
-
-    int image_coordinate[3];
+    // Get the coordinates of the pick inside the slices
+    double position[3];
+    this->Picker->GetPickPosition(position);
 
     // Get the orientation of the slice that the user picked from
-    int axis = this->Viewer->GetSliceOrientation();
-    switch (axis)
+    int orientation = this->Viewer->GetSliceOrientation();
+    // Depending on the orientation get the correct coordinates
+    switch (orientation)
     {
-    case vtkResliceImageViewer::SLICE_ORIENTATION_XZ:
-        image_coordinate[0] = vtkMath::Round(pos[0]);
-        image_coordinate[1] = this->Viewer->GetSlice();
-        image_coordinate[2] = vtkMath::Round(pos[2]);
+    case vtkImageViewer2::SLICE_ORIENTATION_XY:
+        coordinate[0] = vtkMath::Round(position[0]);
+        coordinate[1] = vtkMath::Round(position[1]);
+        coordinate[2] = this->Viewer->GetSlice();
         break;
-    case vtkResliceImageViewer::SLICE_ORIENTATION_YZ:
-        image_coordinate[0] = this->Viewer->GetSlice();
-        image_coordinate[1] = vtkMath::Round(pos[1]);
-        image_coordinate[2] = vtkMath::Round(pos[2]);
+    case vtkImageViewer2::SLICE_ORIENTATION_XZ:
+        coordinate[0] = vtkMath::Round(position[0]);
+        coordinate[1] = this->Viewer->GetSlice();
+        coordinate[2] = vtkMath::Round(position[2]);
         break;
-    default:  // vtkResliceImageViewer::SLICE_ORIENTATION_XY
-        image_coordinate[0] = vtkMath::Round(pos[0]);
-        image_coordinate[1] = vtkMath::Round(pos[1]);
-        image_coordinate[2] = this->Viewer->GetSlice();
+    case vtkImageViewer2::SLICE_ORIENTATION_YZ:
+        coordinate[0] = this->Viewer->GetSlice();
+        coordinate[1] = vtkMath::Round(position[1]);
+        coordinate[2] = vtkMath::Round(position[2]);
         break;
+    default:;
     }
 
     //Text displayed on the window
     std::string message = "Location: ( ";
-    message += vtkVariant(image_coordinate[0]).ToString();
+    message += vtkVariant(coordinate[0]).ToString();
     message += ", ";
-    message += vtkVariant(image_coordinate[1]).ToString();
+    message += vtkVariant(coordinate[1]).ToString();
     message += ", ";
-    message += vtkVariant(image_coordinate[2]).ToString();
+    message += vtkVariant(coordinate[2]).ToString();
     message += " )\nValue: ( ";
 
     switch (image->GetScalarType())
     {
     vtkTemplateMacro((vtkValueMessageTemplate<VTK_TT>(image,
-                                                      image_coordinate,
+                                                      coordinate,
                                                       message)));
 
     default:
         return;
     }
-
+    // Set the correct annotation
     this->Annotation->SetText( 0, message.c_str() );
 
     //Render the interactor

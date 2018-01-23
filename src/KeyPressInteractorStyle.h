@@ -83,12 +83,6 @@ public:
     void SetPicker(vtkPropPicker *picker);
 
     /**
-     * @brief Set the corner annotation (text in the bottom left of each ResliceImageViewer)
-     * @param annotation
-     */
-    void SetAnnotation(vtkCornerAnnotation *annotation);
-
-    /**
      * @brief Set the correct ResliceImageViewer for this interactor style
      * @param viewer
      */
@@ -159,11 +153,6 @@ private:
      * @brief Picker: the Picker associated with this InteractorStyle
      */
     vtkSmartPointer<vtkPropPicker> Picker;
-
-    /**
-     * @brief Annotation: the Corner Annotation associated with this InteractorStyle
-     */
-    vtkSmartPointer<vtkCornerAnnotation> Annotation;
 
     /**
      * @brief Interactor: the interactor associated with this InteractorStyle
