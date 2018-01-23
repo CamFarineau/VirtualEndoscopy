@@ -491,13 +491,13 @@ int main(int argc, char *argv[])
   surfaceRenderer->ResetCameraClippingRange();
   // Finally, add the volume to the renderer
 
-  surfaceRenderWindow->Render();
+  //surfaceRenderWindow->Render();
 
   vtkSmartPointer<KeyPressInteractorNavigationStyle> styleNav =vtkSmartPointer<KeyPressInteractorNavigationStyle>::New();
   styleNav->SetCamera(aCamera);
   styleNav->SetInteractor(view4->GetInteractor());
  // styleNav->SetSurface(deci->GetOutput());
-  styleNav->SetSurfaceCollision(surface);
+  styleNav->SetSurfaceCollision(deci);
   styleNav->SetSphere(source);
   styleNav->SetIntersectionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
