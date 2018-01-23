@@ -1,6 +1,6 @@
 /*
 **    CPE Lyon
-**    Copyright (C) 2018 Camille FARINEAU / Nicolas Ranc
+**    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
 **    KeyPressInteractorNavigationStyle.cxx
@@ -8,6 +8,25 @@
 */
 
 #include "KeyPressInteractorNavigationStyle.h"
+
+// Template for image value reading
+template<typename T>
+void vtkValueMessageTemplate(vtkImageData* image, int* position,
+                             std::string& message)
+{
+  T* tuple = ((T*)image->GetScalarPointer(position));
+  int components = image->GetNumberOfScalarComponents();
+  for (int c = 0; c < components; ++c)
+    {
+    message += vtkVariant(tuple[c]).ToString();
+    if (c != (components - 1))
+      {
+      message += ", ";
+      }
+    }
+  message += " )";
+}
+
 
 /*------------------------------------------------------------------------*\
  * KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
@@ -17,13 +36,14 @@ KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
 {
     this->Camera     = NULL;
     this->intersectionPolyDataFilter = vtkSmartPointer<vtkIntersectionPolyDataFilter>::New();
-    cellIdArray = vtkSmartPointer<vtkIdTypeArray>::New();
-    node = vtkSmartPointer<vtkSelectionNode>::New();
-    selection = vtkSmartPointer<vtkSelection>::New();
-    extractSelection = vtkSmartPointer<vtkExtractSelection>::New();
-    selectedCells = vtkSmartPointer<vtkUnstructuredGrid>::New();
-    geometryFilter = vtkSmartPointer<vtkGeometryFilter>::New();
+    this->cellIdArray = vtkSmartPointer<vtkIdTypeArray>::New();
+    this->node = vtkSmartPointer<vtkSelectionNode>::New();
+    this->selection = vtkSmartPointer<vtkSelection>::New();
+    this->extractSelection = vtkSmartPointer<vtkExtractSelection>::New();
+    this->selectedCells = vtkSmartPointer<vtkUnstructuredGrid>::New();
+    this->geometryFilter = vtkSmartPointer<vtkGeometryFilter>::New();
     this->nb_inter = 0;
+    this->collision = true;
 }
 
 /*------------------------------------------------------------------------*\
@@ -64,7 +84,7 @@ void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPoly
     this->Surface=surface;
 }
 
-void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkDecimatePro> &surface_col)
+void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col)
 {
     this->Surface_col = surface_col;
 }
@@ -113,14 +133,14 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
     if(key == "Up")
     {
         // Camera will look upward
-        Camera->Elevation(-1);
+        Camera->Pitch(1);
     }
 
     // Handle Down arrow key
     if(key == "Down")
     {
         // Camera will look backward
-        Camera->Elevation(1);
+        Camera->Pitch(-1);
     }
 
     // Handle Left arrow key
@@ -136,13 +156,14 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
     }
 
     // For each movement backward or upward
-    if(key == "z" || key=="Z" || key == "s" || key=="S")
+    if((key == "z" || key=="Z" || key == "s" || key=="S") && collision)
     {
         /******************************************************/
         // This sample of code is in charge of create a surface from the cells (triangles) near the camera
         // This way it will look for collision between the bbox of the camera and the surface only with these triangles that are near the camera
         // and not all the triangles of the surface
         // It is freely inspirated from this code : https://www.vtk.org/Wiki/VTK/Examples/Cxx/PolyData/ExtractSelectionCells
+
 
         // Create a cell locator
         vtkSmartPointer<vtkCellLocator> cellLocator = vtkSmartPointer<vtkCellLocator>::New();
@@ -313,6 +334,29 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
             }
         }
     }
+
+    if(!collision){
+        if(key == "z" || key=="Z"){
+
+            // Move forward
+            Camera->Dolly(5);
+            // Set the focal point of the camera
+            Camera->SetDistance(1);
+        }
+        if(key == "s" || key == "S"){
+
+            // Move backward
+            Camera->Dolly(0.6);
+
+            // Set the focal point of the camera
+            Camera->SetDistance(1);
+        }
+    }
+
+
+
+
+
 
     // Handle escape key
     if(key == "Escape")

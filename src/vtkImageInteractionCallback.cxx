@@ -1,3 +1,12 @@
+/*
+**    CPE Lyon
+**    2018 Camille FARINEAU / Nicolas Ranc
+**    Projet Majeur - Virtual Endoscopy
+**
+**    vtkImageInteractionCallback.cxx
+**    Callback Interactor Mouse style : Display text on image viewer - Allow interaction between mouse and image viewers
+*/
+
 #include "vtkImageInteractionCallback.h"
 
 
@@ -59,8 +68,9 @@ void vtkImageInteractionCallback::SetViewer(vtkResliceImageViewer *viewer)
 /*------------------------------------------------------------------------*\
 void vtkImageInteractionCallback::Execute
 \*------------------------------------------------------------------------*/
-void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(event), void *)
+void vtkImageInteractionCallback::Execute(vtkObject *caller, unsigned long vtkNotUsed(event), void *)
 {
+
     //Catch elements corresponding to the current viewer
     vtkRenderWindowInteractor *interactor = this->Viewer->GetRenderWindow()->GetInteractor();
     vtkRenderer* renderer = this->Viewer->GetRenderer();
