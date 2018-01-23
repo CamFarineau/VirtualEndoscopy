@@ -1,3 +1,12 @@
+/*
+**    CPE Lyon
+**    2018 Camille FARINEAU / Nicolas Ranc
+**    Projet Majeur - Virtual Endoscopy
+**
+**    vtkImageInteractionCallback.h
+**    Callback Interactor Mouse style : Display text on image viewer - Allow interaction between mouse and image viewers
+*/
+
 #ifndef vtkImageInteractionCallback_H
 #define vtkImageInteractionCallback_H
 

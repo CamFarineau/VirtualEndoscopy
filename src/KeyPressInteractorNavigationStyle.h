@@ -1,6 +1,6 @@
 /*
 **    CPE Lyon
-**    Copyright (C) 2018 Camille FARINEAU / Nicolas Ranc
+**    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
 **    KeyPressInteractorNavigationStyle.h
@@ -100,9 +100,9 @@ public:
 
     /**
      * @brief Set a particular iso-surface to interact with
-     * @param surface: a particular vtkPolyData representing the surface
+     * @param surface_col: a particular vtkPolyDataAlgorithm that contains the surface
      */
-    void SetSurfaceCollision(const vtkSmartPointer<vtkDecimatePro> &surface_col);
+    void SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col);
 
     /**
      * @brief Set a particular sphere representing the camera bounding box
@@ -137,9 +137,9 @@ private:
     vtkSmartPointer<vtkRenderWindowInteractor> Interactor;
 
     /**
-     * @brief Surface_col: Decimate Object containing a PolyData of the surface for the collision
+     * @brief Surface_col: PolyDataAlgorithm Object containing a PolyData of the surface for the collision
      */
-    vtkSmartPointer<vtkDecimatePro> Surface_col;
+    vtkSmartPointer<vtkPolyDataAlgorithm> Surface_col;
 
     /**
      * @brief Surface: PolyData of the surface of interest

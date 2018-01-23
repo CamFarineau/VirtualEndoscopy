@@ -1,6 +1,6 @@
 /*
 **    CPE Lyon
-**    Copyright (C) 2018 Camille FARINEAU / Nicolas Ranc
+**    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
 **    KeyPressInteractorNavigationStyle.cxx
@@ -8,6 +8,25 @@
 */
 
 #include "KeyPressInteractorNavigationStyle.h"
+
+// Template for image value reading
+template<typename T>
+void vtkValueMessageTemplate(vtkImageData* image, int* position,
+                             std::string& message)
+{
+  T* tuple = ((T*)image->GetScalarPointer(position));
+  int components = image->GetNumberOfScalarComponents();
+  for (int c = 0; c < components; ++c)
+    {
+    message += vtkVariant(tuple[c]).ToString();
+    if (c != (components - 1))
+      {
+      message += ", ";
+      }
+    }
+  message += " )";
+}
+
 
 /*------------------------------------------------------------------------*\
  * KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
@@ -64,7 +83,7 @@ void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPoly
     this->Surface=surface;
 }
 
-void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkDecimatePro> &surface_col)
+void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col)
 {
     this->Surface_col = surface_col;
 }

@@ -1,20 +1,25 @@
-/*=========================================================================
+/*
+**    CPE Lyon
+**    2018 Camille FARINEAU / Nicolas Ranc
+**    Projet Majeur - Virtual Endoscopy
+**
+**    DICOMIMageReaderFileCollection.cxx
+**    Main application :
+**          Read DICOM data
+**          Create GUI : 4 viewers - 3 vtkResliceImageViewer + 1 vtkGenericOpenGLRenderWindow
+**          Each vtkResliceImageViewer window show one slice corresponding to one slide of the volume according to an axis (X,Y,Z)
+**          This volume is the contraction of all slides in accordance with all axis.
+**          vtkGenericOpenGLRenderWindow window represents the surface of the volume created by Marching Cubes Algorithm.
+**
+*/
 
-  Program:   Visualization Toolkit
-  Module:    TestDICOMImageReaderFileCollection.cxx
 
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
-  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+#ifndef __APPLE_CC__
+#include <GL/glut.h>
+#else
+#include <glut.h>
+#endif
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
-
-=========================================================================*/
-// .NAME Test of vtkDICOMImageReader
-// .SECTION Description
-//
 
 #include <vtkAutoInit.h>
 VTK_MODULE_INIT(vtkRenderingOpenGL2)
@@ -117,7 +122,11 @@ VTK_MODULE_INIT(vtkRenderingOpenGL2)
 
 #include "vtkOutlineFilter.h"
 
+vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
+vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 
+vtkNew<vtkRenderer> ren;
+vtkNew<vtkRenderWindow> renWin;
 
 // For compatibility with new VTK generic data arrays
 #ifdef vtkGenericDataArray_h
@@ -128,6 +137,22 @@ using namespace std;
 
 vtkStandardNewMacro(KeyPressInteractorStyle);
 vtkStandardNewMacro(KeyPressInteractorNavigationStyle);
+
+/*static QMainWindow *QtVTKRenderWindows;*/
+
+
+/*void Reshape( int width, int height )
+{
+  renWin->SetSize( width, height );
+}
+
+void Draw()
+{
+  QtVTKRenderWindows->show();
+  surfaceRenderWindow->Render();
+ // surfaceRenderer->GetActiveCamera()->Azimuth( 1 );
+  glutPostRedisplay();
+}*/
 
 
 auto NumberofTriangles = [](vtkPolyData* pd) {
@@ -152,38 +177,9 @@ auto NumberofTriangles = [](vtkPolyData* pd) {
 };
 
 
-class vtkSliderCallback : public vtkCommand
-{
-public:
-  static vtkSliderCallback *New()
-    {
-    return new vtkSliderCallback;
-    }
-
-  vtkSliderCallback():OBBTree(0), Level(0), PolyData(0), Renderer(0){}
-
-  virtual void Execute(vtkObject *caller, unsigned long, void*)
-    {
-    vtkSliderWidget *sliderWidget =
-      reinterpret_cast<vtkSliderWidget*>(caller);
-    this->Level = vtkMath::Round(static_cast<vtkSliderRepresentation *>(sliderWidget->GetRepresentation())->GetValue());
-    this->OBBTree->GenerateRepresentation(this->Level, this->PolyData);
-    this->Renderer->Render();
-    }
-
-  vtkSmartPointer<vtkOBBTree> OBBTree;
-  int Level;
-  vtkSmartPointer<vtkPolyData> PolyData;
-  vtkSmartPointer<vtkRenderer> Renderer;
-};
-
 int main(int argc, char *argv[])
 {
-
-
-
-
-  if ( argc <= 1 )
+ if ( argc <= 1 )
   {
     cout << "Usage: " << argv[0] << " <dicom folder>" << endl;
     return 1;
@@ -224,6 +220,15 @@ int main(int argc, char *argv[])
     gridLayout_2->addWidget(view1, 0, 0, 1, 1);
     QtVTKRenderWindows->setCentralWidget(main_widget);
 
+
+   /* // GLUT initialization
+     glutInit( &argc, argv );
+     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+     glutCreateWindow( "VTK-GLUT Example") ;
+     glutReshapeFunc( Reshape );
+     glutDisplayFunc( Draw);
+*/
+
     vtkSmartPointer<vtkResliceImageViewer> imageViewer[3];
 
     // Visualize
@@ -248,7 +253,7 @@ int main(int argc, char *argv[])
   view3->SetRenderWindow(imageViewer[2]->GetRenderWindow());
   imageViewer[2]->SetupInteractor(view3->GetInteractor());
 
-    //imageViewer->GetRenderWindow()->SetSize(800,800);
+  //imageViewer->GetRenderWindow()->SetSize(800,800);
   vtkSmartPointer<vtkCamera> camera[2];
   vtkSmartPointer<vtkCornerAnnotation> cornerAnnotation[3];
   vtkSmartPointer<vtkImageInteractionCallback> callback[3];
@@ -291,6 +296,7 @@ int main(int argc, char *argv[])
 
       style[i] = vtkSmartPointer<KeyPressInteractorStyle>::New();
       style[i]->SetViewer(imageViewer[i]);
+      //style[i]->SetAnnotation(cornerAnnotation[i]);
       style[i]->SetPicker(propPicker[i]);
 
       if(i==0)
@@ -321,7 +327,6 @@ int main(int argc, char *argv[])
 
   renderWindowInteractor->Initialize();
   renderWindowInteractor->Start();
-
 
 
   //Marching Cubes
@@ -368,10 +373,10 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkStripper> surfaceStripper = vtkSmartPointer<vtkStripper>::New();
   surfaceStripper->SetInputData(surface->GetOutput());
 
-  vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
+//  vtkSmartPointer<vtkRenderer> surfaceRenderer = vtkSmartPointer<vtkRenderer>::New();
   surfaceRenderer->SetBackground(.1, .2, .3);
 
-  vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+ // vtkSmartPointer<vtkGenericOpenGLRenderWindow> surfaceRenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
   surfaceRenderWindow->AddRenderer(surfaceRenderer);
 
   view4->SetRenderWindow(surfaceRenderWindow);
@@ -476,19 +481,24 @@ int main(int argc, char *argv[])
   surfaceRenderer->ResetCameraClippingRange();
   // Finally, add the volume to the renderer
 
-  surfaceRenderWindow->Render();
+  //surfaceRenderWindow->Render();
 
   vtkSmartPointer<KeyPressInteractorNavigationStyle> styleNav =vtkSmartPointer<KeyPressInteractorNavigationStyle>::New();
   styleNav->SetCamera(aCamera);
   styleNav->SetInteractor(view4->GetInteractor());
-  styleNav->SetSurface(deci->GetOutput());
+ // styleNav->SetSurface(deci->GetOutput());
   styleNav->SetSurfaceCollision(deci);
   styleNav->SetSphere(source);
   styleNav->SetIntersectionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
 
-  style[0]->SetSurface(deci);
+
   style[0]->SetStyleNav(styleNav);
+
+  //P interaction windows 2 and 3
+  /*style[1]->SetStyleNav(styleNav);
+  style[2]->SetStyleNav(styleNav);*/
+
 
  for(int j=0;j<3;j++){
     style[j]->SetCamera(aCamera);
@@ -504,15 +514,16 @@ int main(int argc, char *argv[])
   widget->SetInteractor( surfaceInteractor );
   widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
   widget->SetEnabled( 1 );
-//  widget->InteractiveOn();
-
-
-  /******************************************************/
-
-
+  widget->InteractiveOff();
 
   surfaceInteractor->Start();
   QtVTKRenderWindows->show();
+
+ /* // Here is the trick: we ask the RenderWindow to join the current OpenGL context created by GLUT
+  surfaceRenderWindow->InitializeFromCurrentContext();
+
+  // Let's start the main GLUT rendering loop
+  glutMainLoop();*/
 
   app.exec();
   return 0;

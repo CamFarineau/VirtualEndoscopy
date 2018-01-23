@@ -1,6 +1,6 @@
 /*
 **    CPE Lyon
-**    Copyright (C) 2018 Camille FARINEAU / Nicolas Ranc
+**    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
 **    KeyPressInteractorStyle.cxx
@@ -83,21 +83,12 @@ void KeyPressInteractorStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetSurface
- * Set the surface of the object of intereset in the 3D Viewer
- * Param: surface
-\*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetSurface(const vtkSmartPointer<vtkDecimatePro> &surface){
-    Surface=surface;
-}
-
-/*------------------------------------------------------------------------*\
  * KeyPressInteractorStyle::SetStyleNav
  * Set the interactor style of the interactor of the 3D Viewer (useful to interact with the 3D viewer directly from here)
  * Param: viewer
 \*------------------------------------------------------------------------*/
 void KeyPressInteractorStyle::SetStyleNav(const vtkSmartPointer<KeyPressInteractorNavigationStyle>& styleNav){
-    StyleNav=styleNav;
+    this->StyleNav=styleNav;
 }
 
 /*------------------------------------------------------------------------*\
