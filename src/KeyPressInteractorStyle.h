@@ -120,11 +120,6 @@ public:
      * @param renderWindow
      */
     void SetViewerNav(const vtkSmartPointer<vtkRenderWindow>& renderWindow);
-    /**
-     * @brief Set surface (PolyData) of the object of interest in the 3D Viewer
-     * @param surface
-     */
-    void SetSurface(const vtkSmartPointer<vtkDecimatePro>& surface);
 
     /**
      * @brief Set the InteractorStyle of the interactor of the 3D Viewer
@@ -166,11 +161,6 @@ private:
      * @brief Camera: the Camera of the 3D Viewer
      */
     vtkSmartPointer<vtkCamera> Camera;
-
-    /**
-     * @brief Surface: the iso-surface of the object of interest in the 3D Viewer
-     */
-    vtkSmartPointer<vtkDecimatePro> Surface;
 
     /**
      * @brief ViewerNav: the RenderWindow of the 3D Viewer

@@ -152,31 +152,6 @@ auto NumberofTriangles = [](vtkPolyData* pd) {
 };
 
 
-class vtkSliderCallback : public vtkCommand
-{
-public:
-  static vtkSliderCallback *New()
-    {
-    return new vtkSliderCallback;
-    }
-
-  vtkSliderCallback():OBBTree(0), Level(0), PolyData(0), Renderer(0){}
-
-  virtual void Execute(vtkObject *caller, unsigned long, void*)
-    {
-    vtkSliderWidget *sliderWidget =
-      reinterpret_cast<vtkSliderWidget*>(caller);
-    this->Level = vtkMath::Round(static_cast<vtkSliderRepresentation *>(sliderWidget->GetRepresentation())->GetValue());
-    this->OBBTree->GenerateRepresentation(this->Level, this->PolyData);
-    this->Renderer->Render();
-    }
-
-  vtkSmartPointer<vtkOBBTree> OBBTree;
-  int Level;
-  vtkSmartPointer<vtkPolyData> PolyData;
-  vtkSmartPointer<vtkRenderer> Renderer;
-};
-
 int main(int argc, char *argv[])
 {
 
@@ -487,7 +462,6 @@ int main(int argc, char *argv[])
   styleNav->SetIntersectionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
 
-  style[0]->SetSurface(deci);
   style[0]->SetStyleNav(styleNav);
 
  for(int j=0;j<3;j++){

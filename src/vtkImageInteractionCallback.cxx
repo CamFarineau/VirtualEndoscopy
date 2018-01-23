@@ -59,8 +59,9 @@ void vtkImageInteractionCallback::SetViewer(vtkResliceImageViewer *viewer)
 /*------------------------------------------------------------------------*\
 void vtkImageInteractionCallback::Execute
 \*------------------------------------------------------------------------*/
-void vtkImageInteractionCallback::Execute(vtkObject *, unsigned long vtkNotUsed(event), void *)
+void vtkImageInteractionCallback::Execute(vtkObject *caller, unsigned long vtkNotUsed(event), void *)
 {
+
     //Catch elements corresponding to the current viewer
     vtkRenderWindowInteractor *interactor = this->Viewer->GetRenderWindow()->GetInteractor();
     vtkRenderer* renderer = this->Viewer->GetRenderer();
