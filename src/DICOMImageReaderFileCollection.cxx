@@ -69,8 +69,12 @@ VTK_MODULE_INIT(vtkRenderingOpenGL2)
 #include <vtkVertexGlyphFilter.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkOrientationMarkerWidget.h>
-
-
+#include "vtkOpenGLRenderer.h"
+#include "vtkOpenGLCamera.h"
+#include "vtkCullerCollection.h"
+#include "vtkLight.h"
+#include "vtkImageShrink3D.h"
+#include "vtkTimerLog.h"
 #include "vtkResliceImageViewer.h"
 #include "vtkOBBTree.h"
 #include <vtkProperty.h>
@@ -330,7 +334,6 @@ int main(int argc, char *argv[])
   vtkSmartPointer<vtkMarchingCubes> surface = vtkSmartPointer<vtkMarchingCubes>::New();
   vtkSmartPointer<vtkImageData> volume = vtkSmartPointer<vtkImageData>::New();
   volume->DeepCopy(DICOMReader->GetOutput());
-
   double middlePoint[3];
   surface->SetInputData(volume);
   surface->ComputeNormalsOn();
@@ -427,7 +430,7 @@ int main(int argc, char *argv[])
   actor->GetProperty()->SetDiffuseColor(1, .49, .25);
   actor->GetProperty()->SetSpecular(.45);
   actor->GetProperty()->SetSpecularPower(20);
-  actor->GetProperty()->BackfaceCullingOn();
+  //actor->GetProperty()->BackfaceCullingOn();
 
  /* volumeMapper->GetInput()->GetScalarRange(scalarRange);
   volumeMapper->SetBlendModeToComposite();
@@ -478,7 +481,8 @@ int main(int argc, char *argv[])
   vtkSmartPointer<KeyPressInteractorNavigationStyle> styleNav =vtkSmartPointer<KeyPressInteractorNavigationStyle>::New();
   styleNav->SetCamera(aCamera);
   styleNav->SetInteractor(view4->GetInteractor());
-  styleNav->SetSurface(surface->GetOutput());
+  styleNav->SetSurface(deci->GetOutput());
+  styleNav->SetSurfaceCollision(deci);
   styleNav->SetSphere(source);
   styleNav->SetIntersectionPolyDataFilter();
   surfaceInteractor->SetInteractorStyle( styleNav );
@@ -501,6 +505,10 @@ int main(int argc, char *argv[])
   widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
   widget->SetEnabled( 1 );
 //  widget->InteractiveOn();
+
+
+  /******************************************************/
+
 
 
   surfaceInteractor->Start();

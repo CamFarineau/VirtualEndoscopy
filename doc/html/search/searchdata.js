@@ -1,9 +1,16 @@
 var indexSectionsWithContent =
 {
+<<<<<<< HEAD
   0: "cknosv~",
   1: "kv",
   2: "knosv~",
   3: "cns"
+=======
+  0: "acegiknopsv~",
+  1: "kv",
+  2: "knosv~",
+  3: "aceginpsv"
+>>>>>>> master
 };
 
 var indexSectionNames =

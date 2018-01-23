@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_key_press_interactor_style-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">KeyPressInteractorStyle Class Reference</div>  </div>
@@ -176,6 +177,7 @@ vtkSmartPointer&lt; <a class="el" href="class_key_press_interactor_navigation_st
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a9eff3a4d3a7cc145a6bebec25a3e2a5e">coordonnees</a> [3]</td></tr>
 <tr class="memdesc:a9eff3a4d3a7cc145a6bebec25a3e2a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">coordonnees: position where the camera will be placed (position pick by the user) <br /></td></tr>
 <tr class="separator:a9eff3a4d3a7cc145a6bebec25a3e2a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<<<<<<< HEAD
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="class_key_press_interactor_style.html" title="The KeyPressInteractorStyle class: class used to interact with the ResliceImageViewer (pick a positio...">KeyPressInteractorStyle</a> class: class used to interact with the ResliceImageViewer (pick a position where the camera will be placed in the 3D viewer) </p>
@@ -199,6 +201,62 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
+=======
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a64f9e5ace4ebde830738c06b06647ec6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64f9e5ace4ebde830738c06b06647ec6"></a>
+vtkSmartPointer&lt; vtkResliceImageViewer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a64f9e5ace4ebde830738c06b06647ec6">Viewer</a></td></tr>
+<tr class="memdesc:a64f9e5ace4ebde830738c06b06647ec6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Viewer: the ResliceImageViewer associated with this InteractorStyle. <br /></td></tr>
+<tr class="separator:a64f9e5ace4ebde830738c06b06647ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a559f1f4ba4206c378d605604746fd9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a559f1f4ba4206c378d605604746fd9"></a>
+vtkSmartPointer&lt; vtkPropPicker &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a0a559f1f4ba4206c378d605604746fd9">Picker</a></td></tr>
+<tr class="memdesc:a0a559f1f4ba4206c378d605604746fd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Picker: the Picker associated with this InteractorStyle. <br /></td></tr>
+<tr class="separator:a0a559f1f4ba4206c378d605604746fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c565438f30d58d8d1bce7d67ac6a5ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c565438f30d58d8d1bce7d67ac6a5ea"></a>
+vtkSmartPointer&lt; vtkCornerAnnotation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a6c565438f30d58d8d1bce7d67ac6a5ea">Annotation</a></td></tr>
+<tr class="memdesc:a6c565438f30d58d8d1bce7d67ac6a5ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Annotation: the Corner Annotation associated with this InteractorStyle. <br /></td></tr>
+<tr class="separator:a6c565438f30d58d8d1bce7d67ac6a5ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41301ee4aa58ac04f4e7c404a5a1c413"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a41301ee4aa58ac04f4e7c404a5a1c413"></a>
+vtkSmartPointer&lt; vtkRenderWindowInteractor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a41301ee4aa58ac04f4e7c404a5a1c413">Interactor</a></td></tr>
+<tr class="memdesc:a41301ee4aa58ac04f4e7c404a5a1c413"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interactor: the interactor associated with this InteractorStyle. <br /></td></tr>
+<tr class="separator:a41301ee4aa58ac04f4e7c404a5a1c413"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a252bc78214a590db545d4c427d910439"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a252bc78214a590db545d4c427d910439"></a>
+vtkSmartPointer&lt; vtkCamera &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a252bc78214a590db545d4c427d910439">Camera</a></td></tr>
+<tr class="memdesc:a252bc78214a590db545d4c427d910439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Camera: the Camera of the 3D Viewer. <br /></td></tr>
+<tr class="separator:a252bc78214a590db545d4c427d910439"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b7d74bae220bd373329ee63b1c9ed20"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b7d74bae220bd373329ee63b1c9ed20"></a>
+vtkSmartPointer&lt; vtkDecimatePro &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a5b7d74bae220bd373329ee63b1c9ed20">Surface</a></td></tr>
+<tr class="memdesc:a5b7d74bae220bd373329ee63b1c9ed20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surface: the iso-surface of the object of interest in the 3D Viewer. <br /></td></tr>
+<tr class="separator:a5b7d74bae220bd373329ee63b1c9ed20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bfac3f64f3ff1a3c52df81b58627f20"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bfac3f64f3ff1a3c52df81b58627f20"></a>
+vtkSmartPointer&lt; vtkRenderWindow &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_style.html#a7bfac3f64f3ff1a3c52df81b58627f20">ViewerNav</a></td></tr>
+<tr class="memdesc:a7bfac3f64f3ff1a3c52df81b58627f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">ViewerNav: the RenderWindow of the 3D Viewer. <br /></td></tr>
+<tr class="separator:a7bfac3f64f3ff1a3c52df81b58627f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The <a class="el" href="class_key_press_interactor_style.html" title="The KeyPressInteractorStyle class: class used to interact with the ResliceImageViewer (pick a positio...">KeyPressInteractorStyle</a> class: class used to interact with the ResliceImageViewer (pick a position where the camera will be placed in the 3D viewer) </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a8cb6dacf1ba1f82af6f4823d2eb28cd8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="class_key_press_interactor_style.html">KeyPressInteractorStyle</a>* KeyPressInteractorStyle::New </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+>>>>>>> master
 </div><div class="memdoc">
 
 <p>Dynamic allocation of <a class="el" href="class_key_press_interactor_style.html" title="The KeyPressInteractorStyle class: class used to interact with the ResliceImageViewer (pick a positio...">KeyPressInteractorStyle</a>. </p>
