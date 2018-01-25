@@ -353,5 +353,6 @@ void SurfaceViewerKeyPressInteractorStyle::OnKeyPress()
     // Render everything
     this->Interactor->GetRenderWindow()->Render();
 
+ //Handle default VTK key press
  // vtkInteractorStyleTrackballCamera::OnKeyPress();
 }

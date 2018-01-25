@@ -5,6 +5,8 @@
 **
 **    SliceViewerInteractionCallback.h
 **    Callback Interactor Mouse style : Display text on image viewer - Allow interaction between mouse and image viewers
+**
+**    This code comes from this source code: https://www.vtk.org/Wiki/VTK/Examples/Cxx/Images/PickPixel2
 */
 
 #ifndef SliceViewerInteractionCallback_H
@@ -25,18 +27,6 @@
 #include "vtkResliceImageViewer.h"
 
 using namespace std;
-
-/*------------------------------------------------------------------------*\
-Class SliceViewerInteractionCallback
-
-Manage mouse move interactor, display on 2D slices text (current cursor
-inside or outside current viewer).
-
-This code comes from this source code: https:
-//www.vtk.org/Wiki/VTK/Examples/Cxx/Images/PickPixel2
-
-\*------------------------------------------------------------------------*/
-
 
 // Template for image value reading
 template<typename T>
