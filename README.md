@@ -10,6 +10,12 @@ Please read the PDF File "VirtualEndoscopy" for more details about the project<b
 
 <p>Link to the repository of the project: <i>https://github.com/CamFarineau/VirtualEndoscopy</i></p>
 
+<p>This project is part of our study in CPE Lyon in Image-Modelisation-Computing. The purpose of the project is to create a simple viewer for virtual endoscopy. The goal is to visualize the slices from DICOM files obtained with IRM or CT scans. And then it will reconstruct, with Marching Cubes, a particular isosurface in order to navigate into the 3D model of the patient and detect symptom of tumors etc. You can navigate into the 3D model with the keyboard or a controller.</p>
+
+<p>Don't hesitate to look at the documentation inside the doc folder or to look at the documentation of VTK if you have any question.</p>
+
+![Alt text](./misc/Overview.png?raw=true "Overview of the app")
+
 # Requirements
 <p>This project was done and tested under Linux 16.04 environment.</p>
 <p>VTK, QT and OpenGL need to be install</p>
@@ -107,6 +113,9 @@ Please read the PDF File "VirtualEndoscopy" for more details about the project<b
 <p> Map your favorite controller (for example the DualShock 4 controller from Sony) to the keyboard: Arrows keys on one of the joypad, left mouse button to cross button on the controller etc. and navigate into the 3D viewer naturally with the controller.</p>
 <p>Look at the config file inside the misc folder (ds4.conf) for more information how to map correctly the controller.</p>
 
+# Documentation
+
+<p>To look at the documentation open the "index.html" file inside the /doc/html folder.</p>
 
 # References
 

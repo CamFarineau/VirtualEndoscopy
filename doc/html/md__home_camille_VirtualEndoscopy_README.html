@@ -39,7 +39,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li class="current"><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -60,7 +61,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
   <div class="headertitle">
 <div class="title">VirtualEndoscopy<br />
@@ -93,9 +94,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Link to the repository of the project: <em><a href="https://github.com/CamFarineau/VirtualEndoscopy">https://github.com/CamFarineau/VirtualEndoscopy</a></em></p>
 <p>This project is part of our study in CPE Lyon in Image-Modelisation-Computing. The purpose of the project is to create a simple viewer for virtual endoscopy. The goal is to visualize the slices from DICOM files obtained with IRM or CT scans. And then it will reconstruct, with Marching Cubes, a particular isosurface in order to navigate into the 3D model of the patient and detect symptom of tumors etc. You can navigate into the 3D model with the keyboard or a controller.</p>
 <p>Don't hesitate to look at the documentation inside the doc folder or to look at the documentation of VTK if you have any question.</p>
-<div class="image">
-<img src="./misc/Overview.png?raw=true"  alt="Alt text" title="Overview of the app"/>
-</div>
 <h1>Requirements</h1>
 <p>This project was done and tested under Linux 16.04 environment.</p>
 <p>VTK, QT and OpenGL need to be install</p>
