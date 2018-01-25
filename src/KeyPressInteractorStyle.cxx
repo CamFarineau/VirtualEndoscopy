@@ -83,15 +83,6 @@ void KeyPressInteractorStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetStyleNav
- * Set the interactor style of the interactor of the 3D Viewer (useful to interact with the 3D viewer directly from here)
- * Param: viewer
-\*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetStyleNav(const vtkSmartPointer<KeyPressInteractorNavigationStyle>& styleNav){
-    this->StyleNav=styleNav;
-}
-
-/*------------------------------------------------------------------------*\
  * KeyPressInteractorStyle::SetViewerNav
  * Set the RenderWindow of the 3D Viewer (useful to interact with the 3D viewer directly from here)
  * Param: viewer

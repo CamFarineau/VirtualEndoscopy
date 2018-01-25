@@ -10,40 +10,17 @@
 #ifndef KeyPressInteractorStyle_H
 #define KeyPressInteractorStyle_H
 
-#include <vtkVersion.h>
 #include <vtkAssemblyPath.h>
-#include <vtkCell.h>
-#include <vtkCommand.h>
-#include <vtkCornerAnnotation.h>
 #include <vtkImageActor.h>
-#include <vtkInteractorStyleImage.h>
-#include <vtkPointData.h>
 #include <vtkPropPicker.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkTextProperty.h>
-#include <vtkImageNoiseSource.h>
-#include <vtkImageCast.h>
-#include <vtkMath.h>
 #include "vtkSmartPointer.h"
-#include "vtkDICOMImageReader.h"
-#include "vtkCellLocator.h"
-#include "vtkImageData.h"
-#include "vtkRenderer.h"
 #include "vtkResliceImageViewer.h"
 #include "vtkCamera.h"
-#include "vtkRenderWindowInteractor.h"
-#include <vtkActor.h>
 #include <vtkRenderWindow.h>
-#include "vtkSelectionNode.h"
 #include "vtkPolyData.h"
-#include "vtkSelection.h"
-#include "vtkExtractSelection.h"
-#include "vtkUnstructuredGrid.h"
-#include "vtkGeometryFilter.h"
-#include "vtkDecimatePro.h"
-#include "KeyPressInteractorNavigationStyle.h"
-
+#include "vtkInteractorStyleImage.h"
 
 /**
  * @brief The KeyPressInteractorStyle class: class used to interact with the ResliceImageViewer
@@ -119,16 +96,6 @@ public:
      * @param renderWindow
      */
     void SetViewerNav(const vtkSmartPointer<vtkRenderWindow>& renderWindow);
-
-    /**
-     * @brief Set the InteractorStyle of the interactor of the 3D Viewer
-     * @param styleNav
-     */
-    void SetStyleNav(const vtkSmartPointer<KeyPressInteractorNavigationStyle>& styleNav);
-    /**
-     * @brief StyleNav: InteractorStyle of the 3D Viewer (useful to interact with the 3D Viewer directly from here)
-     */
-    vtkSmartPointer<KeyPressInteractorNavigationStyle> StyleNav;
 
     /**
      * @brief coordonnees: position where the camera will be placed (position pick by the user)

@@ -11,45 +11,23 @@
 #ifndef KEYPRESSINTERACTORNAVIGATIONSTYLE_H
 #define KEYPRESSINTERACTORNAVIGATIONSTYLE_H
 
-#include <vtkVersion.h>
-#include <vtkAssemblyPath.h>
-#include <vtkCell.h>
-#include <vtkCommand.h>
-#include <vtkCornerAnnotation.h>
-#include <vtkImageActor.h>
-#include <vtkInteractorStyleImage.h>
-#include <vtkPointData.h>
-#include <vtkPropPicker.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkTextProperty.h>
-#include <vtkImageNoiseSource.h>
-#include <vtkImageCast.h>
-#include <vtkMath.h>
 #include "vtkSmartPointer.h"
 #include "vtkSphereSource.h"
-#include "vtkDICOMImageReader.h"
 #include "vtkImageData.h"
-#include "vtkRenderer.h"
-#include "vtkResliceImageViewer.h"
 #include "vtkCamera.h"
-#include "vtkRenderWindowInteractor.h"
-#include <vtkActor.h>
 #include <vtkRenderWindow.h>
 #include "vtkPolyData.h"
-#include "vtkCameraActor.h"
-#include "vtkSelectEnclosedPoints.h"
+#include "vtkPolyDataAlgorithm.h"
 #include "vtkIntersectionPolyDataFilter.h"
 #include "vtkCellLocator.h"
-
 #include "vtkSelection.h"
 #include "vtkSelectionNode.h"
-#include "vtkPolyData.h"
-#include "vtkSelection.h"
 #include "vtkExtractSelection.h"
 #include "vtkUnstructuredGrid.h"
 #include "vtkGeometryFilter.h"
-#include "vtkDecimatePro.h"
+#include "vtkInteractorStyleTrackballCamera.h"
 
 /**
  * @brief The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene)
@@ -99,10 +77,11 @@ public:
     void SetSurface(const vtkSmartPointer<vtkPolyData> &surface);
 
     /**
-     * @brief Set a particular iso-surface to interact with
-     * @param surface_col: a particular vtkPolyDataAlgorithm that contains the surface
+     * @brief Set a particular iso-surface to interact with, specific for collision
+     * @param surface_col : a particular vtkPolyDataAlgorithm representing the surface
      */
     void SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col);
+
 
     /**
      * @brief Set a particular sphere representing the camera bounding box

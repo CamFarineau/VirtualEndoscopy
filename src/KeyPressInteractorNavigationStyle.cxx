@@ -56,6 +56,7 @@ KeyPressInteractorNavigationStyle::~KeyPressInteractorNavigationStyle()
 }
 
 
+
 /*------------------------------------------------------------------------*\
  * KeyPressInteractorNavigationStyle::SetCamera
  * Set the camera use in the scene
@@ -64,7 +65,6 @@ KeyPressInteractorNavigationStyle::~KeyPressInteractorNavigationStyle()
 void KeyPressInteractorNavigationStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera_){
     Camera=camera_;
 }
-
 
 /*------------------------------------------------------------------------*\
  * KeyPressInteractorNavigationStyle::SetInteractor
@@ -84,8 +84,12 @@ void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPoly
     this->Surface=surface;
 }
 
-void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col)
-{
+/*------------------------------------------------------------------------*\
+ * KeyPressInteractorNavigationStyle::SetSurfaceCollision()
+ * Set the iso-surface specific for collision
+ * Param: surface: a vtkPolyData
+\*------------------------------------------------------------------------*/
+void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col){
     this->Surface_col = surface_col;
 }
 
@@ -164,13 +168,11 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
         // and not all the triangles of the surface
         // It is freely inspirated from this code : https://www.vtk.org/Wiki/VTK/Examples/Cxx/PolyData/ExtractSelectionCells
 
-
         // Create a cell locator
         vtkSmartPointer<vtkCellLocator> cellLocator = vtkSmartPointer<vtkCellLocator>::New();
 
         // Set the data as the surface
         cellLocator->SetDataSet(Surface_col->GetOutput());
-
         // Create the cell locator
         cellLocator->BuildLocator();
 
@@ -192,7 +194,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
         cellLocator->FindCellsWithinBounds(bounds,cellIdList);
 
         //std::cout<<"nb cell: "<<cellIdList->GetNumberOfIds()<<std::endl;
-
         cellIdArray->SetNumberOfComponents(1);
 
         // Put all Ids we found in the list inside this array
@@ -213,7 +214,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
         // The data are the selection of cells inside this surface
         extractSelection->SetInputData(1, selection);
         extractSelection->Update();
-
         // Get all the cells that have been selected
         selectedCells->ShallowCopy(extractSelection->GetOutput());
 
@@ -221,7 +221,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 //                  << " points in the selection." << std::endl;
 //        std::cout << "There are " << selectedCells->GetNumberOfCells()
 //                  << " cells in the selection." << std::endl;
-
         if(selectedCells->GetNumberOfCells() >= 1)
         {
             // Set the grid as data
@@ -243,7 +242,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
             Camera->Dolly(5);
             // Set the focal point of the camera
             Camera->SetDistance(1);
-
             std::cout<<"av norm"<<std::endl;
 
             if(selectedCells->GetNumberOfCells() >= 1)

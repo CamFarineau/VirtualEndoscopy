@@ -10,31 +10,17 @@
 #ifndef vtkImageInteractionCallback_H
 #define vtkImageInteractionCallback_H
 
-#include <vtkVersion.h>
 #include <vtkAssemblyPath.h>
-#include <vtkCell.h>
-#include <vtkCommand.h>
 #include <vtkCornerAnnotation.h>
-#include <vtkImageActor.h>
-#include <vtkInteractorStyleImage.h>
-#include <vtkPointData.h>
 #include <vtkPropPicker.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkTextProperty.h>
-#include <vtkImageNoiseSource.h>
-#include <vtkImageCast.h>
+#include <vtkInteractionStyleObjectFactory.h>
+#include <vtkInteractorStyle.h>
 #include <vtkMath.h>
-#include "vtkSmartPointer.h"
-
-#include "vtkDICOMImageReader.h"
-
+#include "vtkImageActor.h"
+#include "vtkVariant.h"
 #include "vtkImageData.h"
-#include "vtkRenderer.h"
-#include "vtkCamera.h"
-#include "vtkRenderWindowInteractor.h"
-//#include "vtkTestUtilities.h"
-#include <vtkActor.h>
 #include <vtkRenderWindow.h>
 #include "vtkResliceImageViewer.h"
 
