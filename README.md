@@ -86,6 +86,8 @@ Please read the File "/misc/VirtualEndoscopy.pdf" for more details about the pro
 
 <p><b>!! You need to pass the location of the folder where all your DICOM files of interest are located as the first argument when you execute the program !!</b></p>
 
+<p>You can download some test files from the Visible Human Project here: <i>https://mri.radiology.uiowa.edu/visible_human_datasets.html</i></p>
+
 # Controls
 
 ## Mouse
