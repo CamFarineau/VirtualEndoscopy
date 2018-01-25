@@ -3,12 +3,12 @@
 **    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
-**    KeyPressInteractorStyle.h
+**    SliceViewerKeyPressInteractorStyle.h
 **    Interactor Style for the Reslice Image Viewer : handle key event (to point a location for the camera of the 3D Viewer)
 */
 
-#ifndef KeyPressInteractorStyle_H
-#define KeyPressInteractorStyle_H
+#ifndef SliceViewerKeyPressInteractorStyle_H
+#define SliceViewerKeyPressInteractorStyle_H
 
 #include <vtkAssemblyPath.h>
 #include <vtkImageActor.h>
@@ -23,33 +23,33 @@
 #include "vtkInteractorStyleImage.h"
 
 /**
- * @brief The KeyPressInteractorStyle class: class used to interact with the ResliceImageViewer
+ * @brief The SliceViewerKeyPressInteractorStyle class: class used to interact with the ResliceImageViewer
  * (pick a position where the camera will be placed in the 3D viewer)
  */
-class KeyPressInteractorStyle : public vtkInteractorStyleImage
+class SliceViewerKeyPressInteractorStyle : public vtkInteractorStyleImage
 {
 public:
 
     /**
      * @brief Constructor
      */
-    KeyPressInteractorStyle();
+    SliceViewerKeyPressInteractorStyle();
 
     /**
      * @brief Destructor
      */
-    ~KeyPressInteractorStyle();
+    ~SliceViewerKeyPressInteractorStyle();
 
     /**
-     * @brief vtkTypeMacro: KeyPressInteractorStyle is a type vtkInteractorStyleImage
+     * @brief vtkTypeMacro: SliceViewerKeyPressInteractorStyle is a type vtkInteractorStyleImage
      */
-    vtkTypeMacro(KeyPressInteractorStyle, vtkInteractorStyleImage);
+    vtkTypeMacro(SliceViewerKeyPressInteractorStyle, vtkInteractorStyleImage);
 
     /**
-     * @brief Dynamic allocation of KeyPressInteractorStyle
-     * @return  an instance of KeyPressInteractorStyle
+     * @brief Dynamic allocation of SliceViewerKeyPressInteractorStyle
+     * @return  an instance of SliceViewerKeyPressInteractorStyle
      */
-    static KeyPressInteractorStyle* New();
+    static SliceViewerKeyPressInteractorStyle* New();
 
 
     /**
@@ -135,4 +135,4 @@ private:
 
 };
 
-#endif // KeyPressInteractorStyle_H
+#endif // SliceViewerKeyPressInteractorStyle_H

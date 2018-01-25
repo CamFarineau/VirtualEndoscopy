@@ -3,7 +3,7 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="vtkInteractorStyleTrackball\lCamera",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 [label="vtkCommand",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="KeyPressInteractorNavigation\lStyle",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_key_press_interactor_navigation_style.html",tooltip="The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keybo..."];
+  Node2 [label="SliceViewerInteractionCallback",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_slice_viewer_interaction_callback.html",tooltip="The SliceViewerInteractionCallback class: Class used to return mouse coordinates from 2D to 3D world..."];
 }

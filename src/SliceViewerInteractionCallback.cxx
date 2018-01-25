@@ -3,18 +3,19 @@
 **    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
-**    vtkImageInteractionCallback.cxx
-**    Callback Interactor Mouse style : Display text on image viewer - Allow interaction between mouse and image viewers
+**    SliceViewerInteractionCallback.cxx
+**    Class: Callback Interactor Mouse style : Display text on image viewer - Allow interaction between mouse and image viewers
+**    It will be called each time the mouse move on the Slice viewers.
 */
 
-#include "vtkImageInteractionCallback.h"
+#include "SliceViewerInteractionCallback.h"
 
 
 /*------------------------------------------------------------------------*\
- * vtkImageInteractionCallback::vtkImageInteractionCallback
+ * SliceViewerInteractionCallback::SliceViewerInteractionCallback
  * Constructor
 \*------------------------------------------------------------------------*/
-vtkImageInteractionCallback::vtkImageInteractionCallback()
+SliceViewerInteractionCallback::SliceViewerInteractionCallback()
 {
     this->Viewer     = NULL;
     this->Picker     = NULL;
@@ -23,10 +24,10 @@ vtkImageInteractionCallback::vtkImageInteractionCallback()
 
 
 /*------------------------------------------------------------------------*\
-vtkImageInteractionCallback::~vtkImageInteractionCallback
+SliceViewerInteractionCallback::~SliceViewerInteractionCallback
  * Destructor
 \*------------------------------------------------------------------------*/
-vtkImageInteractionCallback::~vtkImageInteractionCallback()
+SliceViewerInteractionCallback::~SliceViewerInteractionCallback()
 {
     this->Viewer     = NULL;
     this->Picker     = NULL;
@@ -35,20 +36,20 @@ vtkImageInteractionCallback::~vtkImageInteractionCallback()
 
 
 /*------------------------------------------------------------------------*\
-void vtkImageInteractionCallback::SetPicker
+void SliceViewerInteractionCallback::SetPicker
  * Param: picker : user click
 \*------------------------------------------------------------------------*/
-void vtkImageInteractionCallback::SetPicker(vtkPropPicker *picker)
+void SliceViewerInteractionCallback::SetPicker(vtkPropPicker *picker)
 {
     this->Picker = picker;
 }
 
 
 /*------------------------------------------------------------------------*\
-void vtkImageInteractionCallback::SetAnnotation
+void SliceViewerInteractionCallback::SetAnnotation
  * Param: annotation : text on the reslice image
 \*------------------------------------------------------------------------*/
-void vtkImageInteractionCallback::SetAnnotation(vtkCornerAnnotation *annotation)
+void SliceViewerInteractionCallback::SetAnnotation(vtkCornerAnnotation *annotation)
 {
     this->Annotation = annotation;
 }
@@ -56,19 +57,19 @@ void vtkImageInteractionCallback::SetAnnotation(vtkCornerAnnotation *annotation)
 
 
 /*------------------------------------------------------------------------*\
-void vtkImageInteractionCallback::SetViewer
+void SliceViewerInteractionCallback::SetViewer
  * Param: viewer : current image
 \*------------------------------------------------------------------------*/
-void vtkImageInteractionCallback::SetViewer(vtkResliceImageViewer *viewer)
+void SliceViewerInteractionCallback::SetViewer(vtkResliceImageViewer *viewer)
 {
     this->Viewer = viewer;
 }
 
 
 /*------------------------------------------------------------------------*\
-void vtkImageInteractionCallback::Execute
+void SliceViewerInteractionCallback::Execute
 \*------------------------------------------------------------------------*/
-void vtkImageInteractionCallback::Execute(vtkObject *caller, unsigned long vtkNotUsed(event), void *)
+void SliceViewerInteractionCallback::Execute(vtkObject *caller, unsigned long vtkNotUsed(event), void *)
 {
 
     //Catch elements corresponding to the current viewer

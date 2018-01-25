@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['annotation',['Annotation',['../classvtk_image_interaction_callback.html#acbc427b0c326c85794f58c1eb3dfa63a',1,'vtkImageInteractionCallback']]]
+  ['annotation',['Annotation',['../class_slice_viewer_interaction_callback.html#a2c106c3cbfd83485b8b157a41c17d79b',1,'SliceViewerInteractionCallback']]]
 ];

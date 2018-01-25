@@ -3,13 +3,13 @@
 **    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
-**    KeyPressInteractorNavigationStyle.h
+**    SurfaceViewerKeyPressInteractorStyle.h
 **    Interactor Style for the 3D Viewer : handle key event (to move the camera in the scene)
 */
 
 
-#ifndef KEYPRESSINTERACTORNAVIGATIONSTYLE_H
-#define KEYPRESSINTERACTORNAVIGATIONSTYLE_H
+#ifndef SurfaceViewerKeyPressInteractorStyle_H
+#define SurfaceViewerKeyPressInteractorStyle_H
 
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
@@ -30,33 +30,33 @@
 #include "vtkInteractorStyleTrackballCamera.h"
 
 /**
- * @brief The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene)
+ * @brief The SurfaceViewerKeyPressInteractorStyle class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene)
  */
-class KeyPressInteractorNavigationStyle : public vtkInteractorStyleTrackballCamera
+class SurfaceViewerKeyPressInteractorStyle : public vtkInteractorStyleTrackballCamera
 {
 public:
 
     /**
-     * @brief New instance of KeyPressInteractorNavigationStyle
-     * @return an instance of KeyPressInteractorNavigationStyle
+     * @brief New instance of SurfaceViewerKeyPressInteractorStyle
+     * @return an instance of SurfaceViewerKeyPressInteractorStyle
      */
-    static KeyPressInteractorNavigationStyle* New();
+    static SurfaceViewerKeyPressInteractorStyle* New();
 
     /**
-     * @brief Destructor of KeyPressInteractorNavigationStyle
+     * @brief Destructor of SurfaceViewerKeyPressInteractorStyle
      * @return
      */
-    ~KeyPressInteractorNavigationStyle();
+    ~SurfaceViewerKeyPressInteractorStyle();
 
     /**
-     * @brief Constructor of KeyPressInteractorNavigationStyle
+     * @brief Constructor of SurfaceViewerKeyPressInteractorStyle
      */
-    KeyPressInteractorNavigationStyle();
+    SurfaceViewerKeyPressInteractorStyle();
 
     /**
-     * @brief Macro type of KeyPressInteractorNavigationStyle is a vtkInteractorStyleTrackballCamera
+     * @brief Macro type of SurfaceViewerKeyPressInteractorStyle is a vtkInteractorStyleTrackballCamera
      */
-    vtkTypeMacro(KeyPressInteractorNavigationStyle, vtkInteractorStyleTrackballCamera);
+    vtkTypeMacro(SurfaceViewerKeyPressInteractorStyle, vtkInteractorStyleTrackballCamera);
 
     /**
      * @brief Function to set the camera of 3D viewer
@@ -177,4 +177,4 @@ private:
 
 };
 
-#endif // KEYPRESSINTERACTORNAVIGATIONSTYLE_H
+#endif // SurfaceViewerKeyPressInteractorStyle_H

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['viewer',['Viewer',['../class_key_press_interactor_style.html#a64f9e5ace4ebde830738c06b06647ec6',1,'KeyPressInteractorStyle::Viewer()'],['../classvtk_image_interaction_callback.html#ab78f1283975e65dec363bc9da9d58d3c',1,'vtkImageInteractionCallback::Viewer()']]],
-  ['viewernav',['ViewerNav',['../class_key_press_interactor_style.html#a7bfac3f64f3ff1a3c52df81b58627f20',1,'KeyPressInteractorStyle']]]
+  ['viewer',['Viewer',['../class_slice_viewer_interaction_callback.html#a5697712c584f646926bff117e0093986',1,'SliceViewerInteractionCallback::Viewer()'],['../class_slice_viewer_key_press_interactor_style.html#abb0f90c2f8a7f5c1ca534b81ed7b5ac5',1,'SliceViewerKeyPressInteractorStyle::Viewer()']]],
+  ['viewernav',['ViewerNav',['../class_slice_viewer_key_press_interactor_style.html#acbb94deae50f9e43f2d9e8b604ad156b',1,'SliceViewerKeyPressInteractorStyle']]]
 ];

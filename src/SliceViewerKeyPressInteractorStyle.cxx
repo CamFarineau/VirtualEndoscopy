@@ -3,18 +3,19 @@
 **    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
-**    KeyPressInteractorStyle.cxx
+**    SliceViewerKeyPressInteractorStyle.cxx
 **    Interactor Style for the Reslice Image Viewer : handle key event (to point a location for the camera of the 3D Viewer)
+**    It will be used each time a key is pressed when the current viewer is one the Slice Viewer
 */
 
 
-#include "KeyPressInteractorStyle.h"
+#include "SliceViewerKeyPressInteractorStyle.h"
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::KeyPressInteractorStyle
+ * SliceViewerKeyPressInteractorStyle::SliceViewerKeyPressInteractorStyle
  * Constructor
 \*------------------------------------------------------------------------*/
-KeyPressInteractorStyle::KeyPressInteractorStyle()
+SliceViewerKeyPressInteractorStyle::SliceViewerKeyPressInteractorStyle()
 {
     this->Viewer     = NULL;
     this->Picker     = NULL;
@@ -26,10 +27,10 @@ KeyPressInteractorStyle::KeyPressInteractorStyle()
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::KeyPressInteractorStyle
+ * SliceViewerKeyPressInteractorStyle::SliceViewerKeyPressInteractorStyle
  * Destructor
 \*------------------------------------------------------------------------*/
-KeyPressInteractorStyle::~KeyPressInteractorStyle()
+SliceViewerKeyPressInteractorStyle::~SliceViewerKeyPressInteractorStyle()
 {
     this->Viewer     = NULL;
     this->Picker     = NULL;
@@ -38,31 +39,31 @@ KeyPressInteractorStyle::~KeyPressInteractorStyle()
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetPicker
+ * SliceViewerKeyPressInteractorStyle::SetPicker
  * Set the correct picker
  * Param: picker
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetPicker(vtkPropPicker *picker)
+void SliceViewerKeyPressInteractorStyle::SetPicker(vtkPropPicker *picker)
 {
     this->Picker = picker;
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetInteractor
+ * SliceViewerKeyPressInteractorStyle::SetInteractor
  * Set the correct interactor of this interactor style
  * Param: interactor
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& Interactor)
+void SliceViewerKeyPressInteractorStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& Interactor)
 {
     this->Interactor=Interactor;
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetViewer
+ * SliceViewerKeyPressInteractorStyle::SetViewer
  * Set the correct ResliceImageViewer with this interactor style
  * Param: viewer
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetViewer(vtkResliceImageViewer *viewer)
+void SliceViewerKeyPressInteractorStyle::SetViewer(vtkResliceImageViewer *viewer)
 {
     this->Viewer = viewer;
 }
@@ -73,31 +74,31 @@ void KeyPressInteractorStyle::SetViewer(vtkResliceImageViewer *viewer)
 // And it is useful to know the differents cells (Triangles) around the camera in the 3D Viewer (for the collision algorithm)
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetCamera
+ * SliceViewerKeyPressInteractorStyle::SetCamera
  * Set the camera of the 3D viewer (useful to put the camera at the same location the user picked)
  * Param: camera
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera)
+void SliceViewerKeyPressInteractorStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera)
 {
     this->Camera=camera;
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::SetViewerNav
+ * SliceViewerKeyPressInteractorStyle::SetViewerNav
  * Set the RenderWindow of the 3D Viewer (useful to interact with the 3D viewer directly from here)
  * Param: viewer
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::SetViewerNav(const vtkSmartPointer<vtkRenderWindow>& renderWindow)
+void SliceViewerKeyPressInteractorStyle::SetViewerNav(const vtkSmartPointer<vtkRenderWindow>& renderWindow)
 {
     this->ViewerNav = renderWindow;
 }
 /*****************************************************************************/
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorStyle::OnChar
+ * SliceViewerKeyPressInteractorStyle::OnChar
  * Will be triggered if there is an event on a key
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorStyle::OnChar()
+void SliceViewerKeyPressInteractorStyle::OnChar()
 {
     // Get the keypress: need the renderWindowInteractor of the Viewer that was used
     vtkRenderWindowInteractor *interactor = this->Viewer->GetRenderWindow()->GetInteractor();
@@ -197,7 +198,7 @@ void KeyPressInteractorStyle::OnChar()
         // Render the 3D Viewer
         ViewerNav->Render();
 
-        std::cout<<"coord: "<<coordonnees[0]<<" , "<<coordonnees[1]<<" , "<<coordonnees[2]<<std::endl;
+        //std::cout<<"coord: "<<coordonnees[0]<<" , "<<coordonnees[1]<<" , "<<coordonnees[2]<<std::endl;
 
         // Render everything
         this->Interactor->GetRenderWindow()->Render();

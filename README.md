@@ -8,6 +8,7 @@ Farineau Camille - Ranc Nicolas<br />
 <br />
 Please read the PDF File "VirtualEndoscopy" for more details about the project<br />
 
+<p>Link to the repository of the project: <i>https://github.com/CamFarineau/VirtualEndoscopy</i></p>
 
 # Requirements
 <p>This project was done and tested under Linux 16.04 environment.</p>
@@ -50,13 +51,84 @@ Please read the PDF File "VirtualEndoscopy" for more details about the project<b
      -DVTK_Group_Qt:BOOL=ON \ <br/>
      -DCMAKE_PREFIX_PATH:PATH=/path/to/qt.5.7.0-install/5.7.0/gcc_64/lib/cmake  \ <br/>
      -DBUILD_SHARED_LIBS:BOOL=ON <br/>
-     /path/to/VTK</p><br/>
+     /path/to/VTK</p>
+
+## Use DualShock 4 controller on Ubuntu
+
+<p>Please follow this link to install the DualShock 4 Controller for Ubuntu and map the controller to the keyboard: <i>https://github.com/chrippa/ds4drv</i></p>
+<p> An example of the config file (ds4drv.conf) we used for controller mapping is located inside the misc folder.</p>
+
+# Compile and run program
+
+## CMAKE
+
+<p><b>Important: Open the CMakeLists.txt located as the root of the VirtualEndoscopy folder. Change the 3 "set" command lines with you own location: </b></p>
+<p>$ set(CMAKE_PREFIX_PATH /Path/To/VTK)</p>
+<p>$ set(QT_QMAKE_EXECUTABLE /Path/To/qmake) (usually : /usr/lib/x86_64-linux-gnu/qt5/bin/qmake)</p>
+<p>$ set(VTK_DIR /Path/To/VTK/Build/)</p>
+
+## Compile
+
+<p>$ cd /location/of/VirtualEndoscopy/folder</p>
+<p>$ mkdir build</p>
+<p>$ cd build</p>
+<p>$ cmake ..</p>
+<p>$ make</p>
+
+## Run
+<p>$ ./VirtualEndoscopy /location/of/the/Folder/containing/DICOM/Files</p>
+
+<p><b>!! You need to pass the location of the folder where all your DICOM files of interest are located as the first argument when you execute the program !!</b></p>
+
+# Controls
+
+## Mouse
+
+### On Slice Viewer
+<p> Left click and move : Change window and level </p>
+<p> Right click and move : Zoom In and Out </p>
+<p> Scroll wheel : Change the slice number </p>
+
+### On 3D Viewer (not recommended, use keyboard instead)
+<p> Left click and move : Controls the camera </p>
+<p> Right click and move : Zoom In and Out </p>
+
+## Keyboard
+
+### On Slice Viewer
+<p> Place the cursor of the mouse at a desired location on a slice and press "P" : Will set the location of the camera of the 3D Viewer to the current mouse location on the slice </p>
+
+### On 3D Viewer
+<p> "Z" : Camera moves forward </p>
+<p> "S" : Camera moves backward </p>
+<p> "Arrow Keys" : Controls the orientation of the camera </p>
+
+## Controller
+<p> Map your favorite controller (for example the DualShock 4 controller from Sony) to the keyboard: Arrows keys on one of the joypad, left mouse button to cross button on the controller etc. and navigate into the 3D viewer naturally with the controller.</p>
+<p>Look at the config file inside the misc folder (ds4.conf) for more information how to map correctly the controller.</p>
 
 
-# Reference
+# References
 
-<p>Please read UsefulWebsite.txt attachment.</p>
+## Dataset
 
+<p>All the datasets we used come from the Visible Human Project and can be found here: <i>https://mri.radiology.uiowa.edu/visible_human_datasets.html</i></p>
 
+## 3D Slicer
 
+<p> We looked and inspired from the 3D Slicer implementation of the endoscopy module: <i>https://www.slicer.org/wiki/Documentation/4.8/Modules/Endoscopy</i></p>
 
+## VTK
+
+<p> Some parts of the code come from the VTK documentation or VTK examples (details of the part used in the src files).</p>
+<p>VTK: <i>https://www.vtk.org/</i></p>
+<p>VTK Examples in C++: <i>https://lorensen.github.io/VTKExamples/site/Cxx/</i></p>
+<p>VTK Marching Cubes: <i>https://www.vtk.org/Wiki/VTK/Examples/Cxx/Modelling/MarchingCubes</i></p>
+<p>VTK Four Pane Viewer: <i>https://github.com/Kitware/VTK/tree/master/Examples/GUI/Qt/FourPaneViewer</i></p>
+
+## vtkSMPTools (Multithreading) & VTK-m (GPU)
+<p><i>https://blog.kitware.com/simple-parallel-computing-with-vtksmptools-2</i></p>
+<p><i>http://m.vtk.org/Wiki/images/3/3b/VTK_SMP_Guide.pdf</i></p>
+
+## Driver for Dualshock 4 controller
+<p><i>https://github.com/chrippa/ds4drv</i></p>

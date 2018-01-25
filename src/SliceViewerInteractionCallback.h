@@ -3,12 +3,12 @@
 **    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
-**    vtkImageInteractionCallback.h
+**    SliceViewerInteractionCallback.h
 **    Callback Interactor Mouse style : Display text on image viewer - Allow interaction between mouse and image viewers
 */
 
-#ifndef vtkImageInteractionCallback_H
-#define vtkImageInteractionCallback_H
+#ifndef SliceViewerInteractionCallback_H
+#define SliceViewerInteractionCallback_H
 
 #include <vtkAssemblyPath.h>
 #include <vtkCornerAnnotation.h>
@@ -27,7 +27,7 @@
 using namespace std;
 
 /*------------------------------------------------------------------------*\
-Class vtkImageInteractionCallback
+Class SliceViewerInteractionCallback
 
 Manage mouse move interactor, display on 2D slices text (current cursor
 inside or outside current viewer).
@@ -58,30 +58,30 @@ void vtkValueMessageTemplate(vtkImageData* image, int* position,
 
 
 /**
- * @brief The vtkImageInteractionCallback class: Class used to return mouse coordinates from 2D to 3D world
+ * @brief The SliceViewerInteractionCallback class: Class used to return mouse coordinates from 2D to 3D world
  */
-class vtkImageInteractionCallback : public vtkCommand
+class SliceViewerInteractionCallback : public vtkCommand
 {
 public:
 
     /**
-     * @brief Dynamic allocation of vtkImageInteractionCallback
-     * @return an instance of vtkImageInteractionCallback
+     * @brief Dynamic allocation of SliceViewerInteractionCallback
+     * @return an instance of SliceViewerInteractionCallback
      */
-    static vtkImageInteractionCallback *New()
+    static SliceViewerInteractionCallback *New()
     {
-        return new vtkImageInteractionCallback;
+        return new SliceViewerInteractionCallback;
     }
 
    /**
    * @brief Constructor
    */
-  vtkImageInteractionCallback();
+  SliceViewerInteractionCallback();
 
   /**
    * @brief Destructor
    */
-  ~vtkImageInteractionCallback();
+  ~SliceViewerInteractionCallback();
 
   /**
    * @brief SetPicker : Set the correct picker (to know where the user clicked)
@@ -126,4 +126,4 @@ private:
 };
 
 
-#endif // vtkImageInteractionCallback_H
+#endif // SliceViewerInteractionCallback_H

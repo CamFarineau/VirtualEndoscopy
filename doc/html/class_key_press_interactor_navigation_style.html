@@ -137,7 +137,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a44ade33ec3e126a412312252af260fbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular iso-surface to interact with.  <a href="#a44ade33ec3e126a412312252af260fbb">More...</a><br /></td></tr>
 <tr class="separator:a44ade33ec3e126a412312252af260fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addd21c41c92a7e5b2d258aaa4fef0c7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#addd21c41c92a7e5b2d258aaa4fef0c7f">SetSurfaceCollision</a> (const vtkSmartPointer&lt; vtkPolyDataAlgorithm &gt; &amp;surface_col)</td></tr>
-<tr class="memdesc:addd21c41c92a7e5b2d258aaa4fef0c7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular iso-surface to interact with.  <a href="#addd21c41c92a7e5b2d258aaa4fef0c7f">More...</a><br /></td></tr>
+<tr class="memdesc:addd21c41c92a7e5b2d258aaa4fef0c7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular iso-surface to interact with, specific for collision.  <a href="#addd21c41c92a7e5b2d258aaa4fef0c7f">More...</a><br /></td></tr>
 <tr class="separator:addd21c41c92a7e5b2d258aaa4fef0c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace8105bf81e1a9dcd052d54df8ff1687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#ace8105bf81e1a9dcd052d54df8ff1687">SetSphere</a> (const vtkSmartPointer&lt; vtkSphereSource &gt; &amp;sphere)</td></tr>
 <tr class="memdesc:ace8105bf81e1a9dcd052d54df8ff1687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular sphere representing the camera bounding box.  <a href="#ace8105bf81e1a9dcd052d54df8ff1687">More...</a><br /></td></tr>
@@ -176,7 +176,7 @@ vtkSmartPointer&lt; vtkRenderWindowInteractor &gt;&#160;</td><td class="memItemR
 <tr class="separator:aa765b0a6afb8c8c8aa663fc2a57ba02b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa47969e288be3b603275c5ed7a453e01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa47969e288be3b603275c5ed7a453e01"></a>
 vtkSmartPointer&lt; vtkPolyDataAlgorithm &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#aa47969e288be3b603275c5ed7a453e01">Surface_col</a></td></tr>
-<tr class="memdesc:aa47969e288be3b603275c5ed7a453e01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surface_col: Decimate Object containing a PolyData of the surface for the collision. <br /></td></tr>
+<tr class="memdesc:aa47969e288be3b603275c5ed7a453e01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surface_col: PolyDataAlgorithm Object containing a PolyData of the surface for the collision. <br /></td></tr>
 <tr class="separator:aa47969e288be3b603275c5ed7a453e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a836a2f112a0353196f486d8b7256709c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a836a2f112a0353196f486d8b7256709c"></a>
 vtkSmartPointer&lt; vtkPolyData &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a836a2f112a0353196f486d8b7256709c">Surface</a></td></tr>
@@ -218,6 +218,10 @@ vtkSmartPointer&lt; vtkUnstructuredGrid &gt;&#160;</td><td class="memItemRight" 
 vtkSmartPointer&lt; vtkGeometryFilter &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#a0ac52d4c6a33aa34c7bed63bf75ef5c6">geometryFilter</a></td></tr>
 <tr class="memdesc:a0ac52d4c6a33aa34c7bed63bf75ef5c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">geometryFilter: Create a geometry filter to change the grid into a PolyData object <br /></td></tr>
 <tr class="separator:a0ac52d4c6a33aa34c7bed63bf75ef5c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f21ca498421cde0f03704a2deaebfe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8f21ca498421cde0f03704a2deaebfe"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_key_press_interactor_navigation_style.html#af8f21ca498421cde0f03704a2deaebfe">collision</a></td></tr>
+<tr class="memdesc:af8f21ca498421cde0f03704a2deaebfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">collision: Enable/Disable collision between camera (sphere) and 3D model <br /></td></tr>
+<tr class="separator:af8f21ca498421cde0f03704a2deaebfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="class_key_press_interactor_navigation_style.html" title="The KeyPressInteractorNavigationStyle class: class used to interact with the 3D Viewer with the keybo...">KeyPressInteractorNavigationStyle</a> class: class used to interact with the 3D Viewer with the keyboard (move the camera in the scene) </p>
@@ -377,10 +381,10 @@ vtkSmartPointer&lt; vtkGeometryFilter &gt;&#160;</td><td class="memItemRight" va
       </table>
 </div><div class="memdoc">
 
-<p>Set a particular iso-surface to interact with. </p>
+<p>Set a particular iso-surface to interact with, specific for collision. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">surface</td><td>a particular vtkPolyData representing the surface </td></tr>
+    <tr><td class="paramname">surface_col</td><td>: a particular vtkPolyDataAlgorithm representing the surface </td></tr>
   </table>
   </dd>
 </dl>

@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
-project(ImageReaderDicomCollection)
+project(VirtualEndoscopy)
 
-set(CMAKE_PREFIX_PATH /home/camille/VTK/)
-set(QT_QMAKE_EXECUTABLE /usr/lib/x86_64-linux-gnu/qt5/bin/qmake)
-set(VTK_DIR /home/camille/VTK/Build/)
+set(CMAKE_PREFIX_PATH /Path/To/VTK/)
+set(QT_QMAKE_EXECUTABLE /Path/To/qmake)
+set(VTK_DIR /Path/To/VTK/Build/)
 
 find_package(VTK COMPONENTS
   vtkGUISupportQt
@@ -25,6 +25,6 @@ file(GLOB DICOMReader_SRC
 )
 find_package(Qt5 COMPONENTS Core REQUIRED QUIET)
 
-add_executable(ImageReaderDicomCollection ${DICOMReader_SRC})
-qt5_use_modules(ImageReaderDicomCollection Core Gui Widgets)
-target_link_libraries(ImageReaderDicomCollection ${VTK_LIBRARIES})
+add_executable(VirtualEndoscopy ${DICOMReader_SRC})
+qt5_use_modules(VirtualEndoscopy Core Gui Widgets)
+target_link_libraries(VirtualEndoscopy ${VTK_LIBRARIES})

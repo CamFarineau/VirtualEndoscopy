@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['nb_5finter',['nb_inter',['../class_key_press_interactor_navigation_style.html#a36fc6a1088b4e4ea6915dcf923417669',1,'KeyPressInteractorNavigationStyle']]],
-  ['nearestsurface',['nearestSurface',['../class_key_press_interactor_navigation_style.html#a2f5d424df03075c9baf308481bf02b45',1,'KeyPressInteractorNavigationStyle::nearestSurface()'],['../class_key_press_interactor_style.html#a92ba7ab7897db2235995598f12e4a407',1,'KeyPressInteractorStyle::nearestSurface()']]],
-  ['node',['node',['../class_key_press_interactor_navigation_style.html#a0d64ceb793e702335c358534fd2c7b42',1,'KeyPressInteractorNavigationStyle']]]
+  ['nb_5finter',['nb_inter',['../class_surface_viewer_key_press_interactor_style.html#a3332cfbf42f8daf8ab87736c8a71ac01',1,'SurfaceViewerKeyPressInteractorStyle']]],
+  ['nearestsurface',['nearestSurface',['../class_slice_viewer_key_press_interactor_style.html#a0b3545172706b738ef1b434519ec7068',1,'SliceViewerKeyPressInteractorStyle::nearestSurface()'],['../class_surface_viewer_key_press_interactor_style.html#a715aae189607a1266fef96a2fdf1876b',1,'SurfaceViewerKeyPressInteractorStyle::nearestSurface()']]],
+  ['node',['node',['../class_surface_viewer_key_press_interactor_style.html#ab44f8c677a16175d5e8608e6a721bb76',1,'SurfaceViewerKeyPressInteractorStyle']]]
 ];

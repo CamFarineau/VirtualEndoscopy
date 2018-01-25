@@ -3,11 +3,11 @@
 **    2018 Camille FARINEAU / Nicolas Ranc
 **    Projet Majeur - Virtual Endoscopy
 **
-**    KeyPressInteractorNavigationStyle.cxx
-**    Interactor Style for the 3D Viewer : handle key event (to move the camera in the scene)
+**    SurfaceViewerKeyPressInteractorStyle.cxx
+**    Interactor Style for the 3D Viewer (or SurfaceViewer) : handle key event (to move the camera in the scene)
 */
 
-#include "KeyPressInteractorNavigationStyle.h"
+#include "SurfaceViewerKeyPressInteractorStyle.h"
 
 // Template for image value reading
 template<typename T>
@@ -29,10 +29,10 @@ void vtkValueMessageTemplate(vtkImageData* image, int* position,
 
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
+ * SurfaceViewerKeyPressInteractorStyle::SurfaceViewerKeyPressInteractorStyle()
  * Constructor
 \*------------------------------------------------------------------------*/
-KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
+SurfaceViewerKeyPressInteractorStyle::SurfaceViewerKeyPressInteractorStyle()
 {
     this->Camera     = NULL;
     this->intersectionPolyDataFilter = vtkSmartPointer<vtkIntersectionPolyDataFilter>::New();
@@ -47,68 +47,66 @@ KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::KeyPressInteractorNavigationStyle()
+ * SurfaceViewerKeyPressInteractorStyle::SurfaceViewerKeyPressInteractorStyle()
  * Destructor
 \*------------------------------------------------------------------------*/
-KeyPressInteractorNavigationStyle::~KeyPressInteractorNavigationStyle()
+SurfaceViewerKeyPressInteractorStyle::~SurfaceViewerKeyPressInteractorStyle()
 {
     this->Camera     = NULL;
 }
 
-
-
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::SetCamera
+ * SurfaceViewerKeyPressInteractorStyle::SetCamera
  * Set the camera use in the scene
  * Param: camera_: a vtkCamera
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera_){
+void SurfaceViewerKeyPressInteractorStyle::SetCamera(const vtkSmartPointer<vtkCamera>& camera_){
     Camera=camera_;
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::SetInteractor
+ * SurfaceViewerKeyPressInteractorStyle::SetInteractor
  * Set the interactor of the RenderWindow. Useful to interact with the scene
  * Param: an interactor
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& interactor){
+void SurfaceViewerKeyPressInteractorStyle::SetInteractor(const vtkSmartPointer<vtkRenderWindowInteractor>& interactor){
     this->Interactor=interactor;
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::SetSurface()
+ * SurfaceViewerKeyPressInteractorStyle::SetSurface()
  * Set the iso-surface created with Marching cubes (useful for collision between the camera bbox and the surface)
  * Param: surface: a vtkPolyData
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetSurface(const vtkSmartPointer<vtkPolyData> &surface){
+void SurfaceViewerKeyPressInteractorStyle::SetSurface(const vtkSmartPointer<vtkPolyData> &surface){
     this->Surface=surface;
 }
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::SetSurfaceCollision()
+ * SurfaceViewerKeyPressInteractorStyle::SetSurfaceCollision()
  * Set the iso-surface specific for collision
  * Param: surface: a vtkPolyData
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col){
+void SurfaceViewerKeyPressInteractorStyle::SetSurfaceCollision(const vtkSmartPointer<vtkPolyDataAlgorithm> &surface_col){
     this->Surface_col = surface_col;
 }
 
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::SetSphere()
+ * SurfaceViewerKeyPressInteractorStyle::SetSphere()
  * Set the sphere that is used as a bbox for the camera (for the collision)
  * Param: sphere: a vtkSphereSource
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetSphere(const vtkSmartPointer<vtkSphereSource>& sphere){
+void SurfaceViewerKeyPressInteractorStyle::SetSphere(const vtkSmartPointer<vtkSphereSource>& sphere){
     this->Sphere=sphere;
 }
 
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::SetInteractionPolyDataFilter()
+ * SurfaceViewerKeyPressInteractorStyle::SetInteractionPolyDataFilter()
  * Set the 2 PolyData that will be used by the InteractionFilter (the bbox of the camera and the surface of the object of interest)
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::SetIntersectionPolyDataFilter()
+void SurfaceViewerKeyPressInteractorStyle::SetIntersectionPolyDataFilter()
 {
     // Set the first PolyData as the bbox of the camera (PolyData of the sphere)
     intersectionPolyDataFilter->SetInputData(0, Sphere->GetOutput());
@@ -121,10 +119,10 @@ void KeyPressInteractorNavigationStyle::SetIntersectionPolyDataFilter()
 
 
 /*------------------------------------------------------------------------*\
- * KeyPressInteractorNavigationStyle::OnKeyPress()
+ * SurfaceViewerKeyPressInteractorStyle::OnKeyPress()
  * Event on key press
 \*------------------------------------------------------------------------*/
-void KeyPressInteractorNavigationStyle::OnKeyPress()
+void SurfaceViewerKeyPressInteractorStyle::OnKeyPress()
 {
     // Get the keypress
     vtkRenderWindowInteractor *rwi = this->Interactor;
@@ -242,27 +240,21 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
             Camera->Dolly(5);
             // Set the focal point of the camera
             Camera->SetDistance(1);
-            std::cout<<"av norm"<<std::endl;
 
             if(selectedCells->GetNumberOfCells() >= 1)
             {
-                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
-
                 // Set the bbox of the camera at the correct location
                 Sphere->SetCenter(Camera->GetPosition());
 
                 // Render everything
                 this->Interactor->GetRenderWindow()->Render();
 
-                //this->SetIntersectionPolyDataFilter();
-                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
-
                 // Update the IntersectionFilter with the new PolyData
                 intersectionPolyDataFilter->Update();
 
                 // Get the number of intersections
                 nb_inter = intersectionPolyDataFilter->GetNumberOfIntersectionPoints();
-                std::cout<<"Inters: "<<nb_inter<<std::endl;
+                //std::cout<<"Inters: "<<nb_inter<<std::endl;
 
                 // If there are some intersections
                 // Then move backward to get back to the old position
@@ -276,7 +268,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
                     Camera->SetDistance(1);
                     // Render everything
                     this->Interactor->GetRenderWindow()->Render();
-                    std::cout<<"recule"<<std::endl;
                 }
             }
         }
@@ -290,27 +281,20 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
             // Set the focal point of the camera
             Camera->SetDistance(1);
 
-            std::cout<<"rc norm"<<std::endl;
-
             if(selectedCells->GetNumberOfCells() >= 1)
             {
-
-                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
-
                 // Set the bbox of the camera at the correct location
                 Sphere->SetCenter(Camera->GetPosition());
 
                 // Render everything
                 this->Interactor->GetRenderWindow()->Render();
 
-                //std::cout<<"sphere x:"<<Sphere->GetCenter()[0]<<" y:"<<Sphere->GetCenter()[1]<<" z:"<<Sphere->GetCenter()[2]<<std::endl;
-                this->SetIntersectionPolyDataFilter();
                 // Update the IntersectionFilter with the new PolyData
                 intersectionPolyDataFilter->Update();
 
                 // Get the number of intersections
                 nb_inter = intersectionPolyDataFilter->GetNumberOfIntersectionPoints();
-                std::cout<<"Inters: "<<nb_inter<<std::endl;
+                //std::cout<<"Inters: "<<nb_inter<<std::endl;
 
                 // If there are some intersections
                 // Then move forward to get back to the old position
@@ -326,8 +310,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
 
                     // Render everything
                     this->Interactor->GetRenderWindow()->Render();
-
-                    std::cout<<"avance"<<std::endl;
                 }
             }
         }
@@ -350,11 +332,6 @@ void KeyPressInteractorNavigationStyle::OnKeyPress()
             Camera->SetDistance(1);
         }
     }
-
-
-
-
-
 
     // Handle escape key
     if(key == "Escape")
