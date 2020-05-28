@@ -11,11 +11,11 @@ Farineau Camille - Ranc Nicolas<br />
 
 [Presentation of the project](misc/Farineau_Ranc_VirtualEndoscopyPresentation.pdf)
 
-Please read the file [/misc/VirtualEndoscopy.pdf](/misc/VirtualEndoscopy.pdf) for more details about the project<br />
+Please read the file [/misc/VirtualEndoscopy.pdf](/misc/VirtualEndoscopy.pdf) for more details about the project
 
-<p>Link to the repository of the project: <i>https://github.com/CamFarineau/VirtualEndoscopy</i></p>
+Link to the repository of the project: <i>https://github.com/CamFarineau/VirtualEndoscopy</i>
 
-<p>This project is part of our study in CPE Lyon in Image-Modelisation-Computing. The purpose of the project is to create a simple viewer for virtual endoscopy. The goal is to visualize the slices from DICOM files obtained with IRM or CT scans. And then it will reconstruct, with Marching Cubes, a particular isosurface in order to navigate into the 3D model of the patient and detect symptom of tumors etc. You can navigate into the 3D model with the keyboard or a controller.</p>
+This project is part of our study in CPE Lyon in Image-Modelisation-Computing. The purpose of the project is to create a simple viewer for virtual endoscopy. The goal is to visualize the slices from DICOM files obtained with IRM or CT scans. And then it will reconstruct, with Marching Cubes, a particular isosurface in order to navigate into the 3D model of the patient and detect symptom of tumors etc. You can navigate into the 3D model with the keyboard or a controller.
 
 Don't hesitate to look at the [documentation](doc/html/index.html) or to look at the documentation of VTK if you have any question.
 
