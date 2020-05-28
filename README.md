@@ -6,6 +6,8 @@ Projet Majeure - 5IMI @CPELyon<br />
 Farineau Camille - Ranc Nicolas<br />
 ################################<br />
 <br />
+[a relative link](doc/html/index.html)
+
 Please read the File "/misc/VirtualEndoscopy.pdf" for more details about the project<br />
 
 <p>Link to the repository of the project: <i>https://github.com/CamFarineau/VirtualEndoscopy</i></p>
