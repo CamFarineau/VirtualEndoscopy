@@ -6,15 +6,18 @@ Projet Majeure - 5IMI @CPELyon<br />
 Farineau Camille - Ranc Nicolas<br />
 ################################<br />
 <br />
-[a relative link](doc/html/index.html)
 
-Please read the File "/misc/VirtualEndoscopy.pdf" for more details about the project<br />
+[Poster of the project](misc/Farineau_Ranc_VirtualEndoscopyPoster.pdf)
+
+[Presentation of the project](misc/Farineau_Ranc_VirtualEndoscopyPresentation.pdf)
+
+Please read the File [/misc/VirtualEndoscopy.pdf](/misc/VirtualEndoscopy.pdf) for more details about the project<br />
 
 <p>Link to the repository of the project: <i>https://github.com/CamFarineau/VirtualEndoscopy</i></p>
 
 <p>This project is part of our study in CPE Lyon in Image-Modelisation-Computing. The purpose of the project is to create a simple viewer for virtual endoscopy. The goal is to visualize the slices from DICOM files obtained with IRM or CT scans. And then it will reconstruct, with Marching Cubes, a particular isosurface in order to navigate into the 3D model of the patient and detect symptom of tumors etc. You can navigate into the 3D model with the keyboard or a controller.</p>
 
-<p>Don't hesitate to look at the documentation inside the doc folder or to look at the documentation of VTK if you have any question.</p>
+<p>Don't hesitate to look at the [documentation](doc/html/index.html) or to look at the documentation of VTK if you have any question.</p>
 
 ![Alt text](./misc/Overview.png?raw=true "Overview of the app")
 
